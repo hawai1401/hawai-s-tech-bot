@@ -1,0 +1,25 @@
+{
+  "bot-id": "1412838664760852512",
+  "owner-id": ["1091617877725024326"],
+  "beta-id": [],
+  "blacklist-id": ["1295037828694278144", "690885922685845535"],
+  "prefix": "ht!",
+  "embed": {
+    "normal": 1910841,
+    "success": 7929736,
+    "success_2": 7929791,
+    "warn": 16697403,
+    "error": 16669789,
+    "question": 1299445
+  },
+  "emojis": {
+    "success": "<:coche:1408551329026146334>",
+    "warn": "<:attention:1408491864906141807>",
+    "error": "<:croix:1408551342821212230>",
+    "question": "<:question:1411046157064601691>",
+    "loading": "<a:loading:1438941642714386625>",
+    "arrow_left": "1438941642714386625",
+    "arrow_right": "<:arrow_righ:1411387131401867416>"
+  },
+  "interaction_time": {}
+}
