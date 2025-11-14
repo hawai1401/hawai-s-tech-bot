@@ -3,8 +3,8 @@ import type { botClient } from "../../index.js";
 import Container from "../../class/container.js";
 import config from "../../../config.json" with { type: "json" };
 
-export default async function buttonInteraction(interaction: Interaction, bot: botClient) {
-  if (!interaction.isButton()) return;
+export default async function stringSelectMenuInteraction(interaction: Interaction, bot: botClient) {
+  if (!interaction.isStringSelectMenu()) return;
   const user_id = interaction.customId.split("_")[1]!;
   if (user_id !== interaction.user.id)
     return interaction.reply({

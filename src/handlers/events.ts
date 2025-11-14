@@ -2,12 +2,13 @@ import type { botClient } from "../index.js";
 import * as logs from "../logger.js";
 import buttonInteraction from "../events/buttons/interactionCreate.js";
 import fs from "fs";
+import stringSelectMenuInteraction from "../events/stringSelectMenu/interactionCreate.js";
 
 export const deployementEvent = async (bot: botClient) => {
   const categorie = fs.readdirSync("./dist/events", { encoding: "utf-8" });
 
   for (const folderName of categorie) {
-    if (folderName === "buttons") continue;
+    if (folderName === "buttons" || folderName === "stringSelectMenu") continue;
     const events = fs.readdirSync(`./dist/events/${folderName}`, {
       encoding: "utf-8",
     });
@@ -35,7 +36,8 @@ export const deployementEvent = async (bot: botClient) => {
       }
     }
   }
-  bot.on("interactionCreate", (interaction) =>
-    buttonInteraction(interaction, bot)
-  );
+  bot.on("interactionCreate", (interaction) => {
+    buttonInteraction(interaction, bot);
+    stringSelectMenuInteraction(interaction, bot);
+  });
 };
