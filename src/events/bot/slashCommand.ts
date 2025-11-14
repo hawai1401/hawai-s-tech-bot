@@ -4,11 +4,11 @@ import type { botClient } from "../../index.js";
 import { eventSlash } from "../../logger.js";
 
 export const type = "interactionCreate";
-type command = (interaction: Interaction, bot: botClient) => Promise<string>;
+type command = (interaction: Interaction, client: botClient) => Promise<string>;
 
-export const event = async (interaction: Interaction, bot: botClient) => {
+export const event = async (interaction: Interaction, client: botClient) => {
   if (!interaction.isCommand()) return;
-  const command = bot.commands.get(interaction.commandName);
+  const command = client.commands.get(interaction.commandName);
 
   if (!command) return;
   try {
@@ -29,5 +29,5 @@ export const event = async (interaction: Interaction, bot: botClient) => {
     );
   }
 
-  await (command as command)(interaction, bot);
+  await (command as command)(interaction, client);
 };

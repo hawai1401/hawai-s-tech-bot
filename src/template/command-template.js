@@ -29,7 +29,7 @@ export const cmd_builder = new SlashCommandBuilder()
 
 export const command = async (
   interaction: ChatInputCommandInteraction,
-  bot: botClient
+  client: botClient
 ) => {
   if (!config["owner-id"].includes(interaction.user.id))
     return await interaction.reply({
