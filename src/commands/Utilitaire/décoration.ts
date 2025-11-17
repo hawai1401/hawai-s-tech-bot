@@ -11,7 +11,7 @@ import type { botClient } from "../../index.js";
 import erreur from "../../functions/error.js";
 import Button from "../../class/button.js";
 
-export const name = "decoration";
+export const name = "décoration";
 export const description =
   "Afficher votre décoration ou celle d'un autre utilisateur.";
 
@@ -42,9 +42,10 @@ export const command = async (
   );
   const decoration = user.avatarDecorationURL();
   if (!decoration)
-    return erreur("Cet utilisateur ne possède pas de décoration !", interaction, {
-      ephemeral: true,
-    });
+    return erreur(
+      "Cet utilisateur ne possède pas de décoration !",
+      interaction
+    );
 
   interaction.reply({
     content: decoration,

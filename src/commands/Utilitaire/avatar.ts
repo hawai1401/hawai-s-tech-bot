@@ -40,11 +40,9 @@ export const command = async (
   const user = await client.users.fetch(
     interaction.options.getUser("utilisateur")?.id ?? interaction.user.id
   );
-  const avatar = user.avatarURL();
+  const avatar = user.displayAvatarURL();
   if (!avatar)
-    return erreur("Cet utilisateur ne possède pas d'avatar !", interaction, {
-      ephemeral: true,
-    });
+    return erreur("Cet utilisateur ne possède pas d'avatar !", interaction);
 
   interaction.reply({
     content: avatar,

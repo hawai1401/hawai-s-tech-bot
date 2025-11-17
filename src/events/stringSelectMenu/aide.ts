@@ -2,10 +2,12 @@ import {
   MessageFlags,
   StringSelectMenuBuilder,
   StringSelectMenuInteraction,
-  type APIApplicationCommandOption,
   type APIApplicationCommandOptionBase,
-  type ApplicationCommandOption,
+  type APIApplicationCommandSubcommandOption,
+  type ApplicationCommandSubCommand,
   type ComponentEmojiResolvable,
+  type ApplicationCommandOption,
+  ApplicationCommandOptionType,
 } from "discord.js";
 import type { botClient } from "../../index.js";
 import selectMenuOption from "../../class/selectMenuOption.js";
@@ -15,8 +17,8 @@ import Container from "../../class/container.js";
 export const type = "interactionCreate";
 
 export const event = async (
-  interaction: StringSelectMenuInteraction,
-  client: botClient
+  client: botClient,
+  interaction: StringSelectMenuInteraction
 ) => {
   const value = interaction.values[0]!;
 
@@ -26,7 +28,7 @@ export const event = async (
   > = {
     Accueil: { emoji: "🏠", description: "Accueil du menu d'aide." },
     Développeur: {
-      emoji: "1409160797346857112",
+      emoji: "<:activedeveloper:1409160797346857112>",
       description: "Commandes réservées au développeur du bot.",
     },
     Économie: { emoji: "🪙", description: "Soon..." },
@@ -87,27 +89,70 @@ export const event = async (
   const commands = await client.application!.commands.fetch();
   for (const commande of cat) {
     if (whitelist.includes(commande)) continue;
-    commands.forEach((cmd) => {
-      if (cmd.name === commande.slice(0, commande.length - 3)) {
-        let options = "";
-        cmd.options.forEach(
-          (option: APIApplicationCommandOptionBase<any>) =>
-            (options += `> - **${option.name}**\n>   - __Description__ : ${
-              option.description
-            }\n>   - __Obligatoire__ : ${
-              option.required
-                ? "<:coche:1408551329026146334>"
-                : "<:croix:1408551342821212230>"
-            }\n`)
-        );
-        container
-          .addText(
-            `### </${cmd.name}:${cmd.id}>\n- **Description :**\n> ${
-              cmd.description
-            }${options ? `\n- **Options :**\n${options}` : ""}`
-          )
-          .addSeparator("Small");
-      }
+
+    const cmd = commands.find(
+      (c) => c.name === commande.slice(0, commande.length - 3)
+    );
+    if (!cmd) continue;
+    let includeSubCommands = false;
+    let options = "";
+
+    cmd.options.forEach((option: ApplicationCommandOption) => {
+      if (
+        option.type !== ApplicationCommandOptionType.Subcommand &&
+        option.type !== ApplicationCommandOptionType.SubcommandGroup
+      )
+        return (options += `> - **${option.name}**\n>   - __Description__ : ${
+          option.description
+        }\n>   - __Obligatoire__ : ${
+          option.required
+            ? "<:coche:1408551329026146334>"
+            : "<:croix:1408551342821212230>"
+        }\n`);
+
+      includeSubCommands = true;
+    });
+
+    if (!includeSubCommands) {
+      container
+        .addText(
+          `### </${cmd.name}:${cmd.id}>\n- **Description :**\n> ${
+            cmd.description
+          }${options ? `\n- **Options :**\n${options}` : ""}`
+        )
+        .addSeparator("Small");
+      continue;
+    }
+
+    cmd.options.forEach((sub) => {
+      if (sub.type !== ApplicationCommandOptionType.Subcommand) return;
+
+      const subCommand = sub as ApplicationCommandSubCommand;
+      let sub_options = "";
+
+      subCommand.options?.forEach((option: ApplicationCommandOption) => {
+        if (
+          option.type === ApplicationCommandOptionType.Subcommand ||
+          option.type === ApplicationCommandOptionType.SubcommandGroup
+        )
+          return;
+
+        sub_options += `> - **${option.name}**\n>   - __Description__ : ${
+          option.description
+        }\n>   - __Obligatoire__ : ${
+          option.required
+            ? "<:coche:1408551329026146334>"
+            : "<:croix:1408551342821212230>"
+        }\n`;
+      });
+
+      container
+        .addText(
+          `### </${cmd.name} ${sub.name}:${cmd.id}>\n- **Description :**\n> ${
+            sub.description
+          }${sub_options ? `\n- **Options :**\n${sub_options}` : ""}`
+        )
+        .addSeparator("Small");
     });
   }
 

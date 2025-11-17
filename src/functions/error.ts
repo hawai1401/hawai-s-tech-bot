@@ -14,16 +14,16 @@ export default async function erreur(
     | AnySelectMenuInteraction,
   options?: {
     isDefered?: boolean;
-    ephemeral?: boolean;
+    notEphemeral?: boolean;
   }
 ) {
   const res = {
     components: [
       new Container("error").addText(`### ${config.emojis.error} - ${erreur}`),
     ],
-    flags: 32768,
+    flags: 32832,
   };
-  if (!options?.isDefered && options?.ephemeral) res.flags = 32832;
+  if (options?.notEphemeral) res.flags = 32768;
   if (options?.isDefered) return interaction.editReply(res);
   if (interaction instanceof ChatInputCommandInteraction)
     return interaction.reply(res);

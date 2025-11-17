@@ -11,7 +11,7 @@ import type { botClient } from "../../index.js";
 import erreur from "../../functions/error.js";
 import Button from "../../class/button.js";
 
-export const name = "banniere";
+export const name = "bannière";
 export const description =
   "Afficher votre bannière ou celle d'un autre utilisateur.";
 
@@ -42,9 +42,7 @@ export const command = async (
   );
   const banner = user.bannerURL();
   if (!banner)
-    return erreur("Cet utilisateur ne possède pas de bannière !", interaction, {
-      ephemeral: true,
-    });
+    return erreur("Cet utilisateur ne possède pas de bannière !", interaction);
 
   interaction.reply({
     content: banner,

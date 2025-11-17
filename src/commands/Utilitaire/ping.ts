@@ -11,7 +11,8 @@ import config from "../../../config.json" with { type: "json" };
 import type { botClient } from "../../index.js";
 
 export const name = "ping";
-export const description = "Retourne le ping.";
+export const description =
+  "Connaître la latence du bot, de la base de données et de l'API de discord.";
 
 export const cmd_builder = new SlashCommandBuilder()
   .setName(name)
@@ -42,11 +43,16 @@ export const command = async (
       new EmbedBuilder()
         .setColor(config.embed.normal)
         .setFields(
-          { name: "🔷 - Discord", value: `**${bot.ws.ping}** ms` },
-          { name: ":robot: - Bot", value: `**${ping}** ms` },
+          {
+            name: "🔷 - API Discord",
+            value: `**${bot.ws.ping}** ms`,
+            inline: true,
+          },
+          { name: ":robot: - Bot", value: `**${ping}** ms`, inline: true },
           {
             name: ":file_cabinet: - Base de données",
             value: `**${ping_db}** ms`,
+            inline: true,
           }
         )
         .setFooter({

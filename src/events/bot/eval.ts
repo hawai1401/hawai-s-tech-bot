@@ -5,7 +5,7 @@ import { createRequire } from "module";
 
 export const type = "messageCreate";
 
-export const event = async (message: Message, client: botClient) => {
+export const event = async (client: botClient, message: Message) => {
   if (
     !message.content.startsWith(String(`${config.prefix}eval`)) ||
     !config["owner-id"].includes(message.author.id)
@@ -15,7 +15,9 @@ export const event = async (message: Message, client: botClient) => {
   const require = createRequire(import.meta.url);
   try {
     const result = await eval(
-      `(async () => {${message.content.slice(String(`${config.prefix}eval`).length + 1)}})()`
+      `(async () => {${message.content.slice(
+        String(`${config.prefix}eval`).length + 1
+      )}})()`
     );
     const embed = new EmbedBuilder()
       .setTitle(

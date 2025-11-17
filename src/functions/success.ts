@@ -13,8 +13,9 @@ export default async function success(
     | ButtonInteraction
     | AnySelectMenuInteraction,
   options?: {
-    defered?: boolean;
-    ephemeral?: boolean;
+    isDefered?: boolean;
+    followUp?: boolean
+    notEphemeral?: boolean;
   }
 ) {
   const res = {
@@ -23,10 +24,11 @@ export default async function success(
         `### ${config.emojis.success} - ${message}`
       ),
     ],
-    flags: 32768,
+    flags: 32832,
   };
-  if (!options?.defered && options?.ephemeral) res.flags = 32832;
-  if (options?.defered) return interaction.editReply(res);
+  if (options?.notEphemeral) res.flags = 32768;
+  if (options?.followUp) return interaction.followUp(res)
+  if (options?.isDefered) return interaction.editReply(res);
   if (interaction instanceof ChatInputCommandInteraction)
     return interaction.reply(res);
   return interaction.update(res);

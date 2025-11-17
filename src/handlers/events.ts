@@ -4,7 +4,7 @@ import buttonInteraction from "../events/buttons/interactionCreate.js";
 import fs from "fs";
 import stringSelectMenuInteraction from "../events/stringSelectMenu/interactionCreate.js";
 
-export const deployementEvent = async (bot: botClient) => {
+export const deployementEvent = async (client: botClient) => {
   const categorie = fs.readdirSync("./dist/events", { encoding: "utf-8" });
 
   for (const folderName of categorie) {
@@ -18,8 +18,8 @@ export const deployementEvent = async (bot: botClient) => {
 
         // Config l'event
         try {
-          bot.on(actual_event.type, (...args: any) =>
-            actual_event.event(...args, bot)
+          client.on(actual_event.type, (...args: any) =>
+            actual_event.event(client, ...args)
           );
           logs.deployementEvent(event.slice(0, event.length - 3), true);
         } catch (error) {
@@ -36,8 +36,8 @@ export const deployementEvent = async (bot: botClient) => {
       }
     }
   }
-  bot.on("interactionCreate", (interaction) => {
-    buttonInteraction(interaction, bot);
-    stringSelectMenuInteraction(interaction, bot);
+  client.on("interactionCreate", (interaction) => {
+    buttonInteraction(client, interaction);
+    stringSelectMenuInteraction(client, interaction);
   });
 };

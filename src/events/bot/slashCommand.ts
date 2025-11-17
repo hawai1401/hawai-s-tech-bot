@@ -6,7 +6,7 @@ import { eventSlash } from "../../logger.js";
 export const type = "interactionCreate";
 type command = (interaction: Interaction, client: botClient) => Promise<string>;
 
-export const event = async (interaction: Interaction, client: botClient) => {
+export const event = async (client: botClient, interaction: Interaction) => {
   if (!interaction.isCommand()) return;
   const command = client.commands.get(interaction.commandName);
 
