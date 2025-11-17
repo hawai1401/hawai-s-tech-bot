@@ -35,8 +35,8 @@ export const cmd_builder = new SlashCommandBuilder()
   ]);
 
 export const command = async (
+  client: botClient,
   interaction: ChatInputCommandInteraction,
-  client: botClient
 ) => {
   const cats: Record<
     string,

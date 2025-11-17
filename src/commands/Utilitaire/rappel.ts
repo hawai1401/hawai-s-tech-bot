@@ -70,8 +70,8 @@ export const cmd_builder = new SlashCommandBuilder()
   );
 
 export const command = async (
+  client: botClient,
   interaction: ChatInputCommandInteraction,
-  client: botClient
 ) => {
   const sub = interaction.options.getSubcommand(true) as
     | "créer"

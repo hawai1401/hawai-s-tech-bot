@@ -28,8 +28,8 @@ export const cmd_builder = new SlashCommandBuilder()
   ]);
 
 export const command = async (
+  bot: botClient,
   interaction: ChatInputCommandInteraction,
-  bot: botClient
 ) => {
   const ping = Date.now() - interaction.createdTimestamp;
   await interaction.deferReply();
