@@ -18,6 +18,7 @@ export default async function erreur(
   }
 ) {
   const res = {
+    embeds: [],
     components: [
       new Container("error").addText(`### ${config.emojis.error} - ${erreur}`),
     ],
