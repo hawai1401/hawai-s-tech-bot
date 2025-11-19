@@ -16,7 +16,6 @@ import { getDb } from "../../db/mongo.js";
 import config from "../../../config.json" with { type: "json" };
 import type { botClient } from "../../index.js";
 import erreur from "../../functions/error.js";
-import { ObjectId } from "mongodb";
 import Container from "../../class/container.js";
 import Button from "../../class/button.js";
 import success from "../../functions/success.js";
@@ -77,7 +76,7 @@ export const command = async (
     | "créer"
     | "lister"
     | "supprimer";
-  const db = getDb().collection("Rappels");
+  const db = getDb().Rappels;
   const msg = await interaction.deferReply();
 
   if (sub === "créer") {
@@ -101,7 +100,6 @@ export const command = async (
       .find({
         user: interaction.user.id,
       })
-      .toArray();
 
     if (nbr_rappels.length === 25)
       return erreur(
@@ -117,7 +115,6 @@ export const command = async (
     return await interaction.editReply({
       embeds: [
         new EmbedBuilder()
-          .setDescription("### :pencil: - Nouveau rappel")
           .setFields(
             { name: ":bookmark_tabs: - Contenu", value: `> ${message}` },
             {
@@ -126,7 +123,7 @@ export const command = async (
             }
           )
           .setFooter({
-            text: `N'oubliez d'ouvrir vos MP !`,
+            text: `N'oubliez pas d'ouvrir vos MP !`,
             iconURL: client.user.displayAvatarURL() as string,
           })
           .setColor(config.embed.success)
@@ -139,13 +136,7 @@ export const command = async (
     const rappels = (await db
       .find({
         user: interaction.user.id,
-      })
-      .toArray()) as Array<{
-      _id: ObjectId;
-      user: string;
-      message: string;
-      date: number;
-    }>;
+      }));
 
     if (rappels.length === 0)
       return erreur("Vous n'avez pas de rappels !", interaction, {
@@ -199,7 +190,7 @@ export const command = async (
   if (sub === "supprimer") {
     const rappel_id = interaction.options.getString("rappel", true);
     if (rappel_id === "null") return erreur("Vous n'avez aucun rappel !", interaction, {isDefered: true})
-    const rappel = await db.findOneAndDelete({ _id: new ObjectId(rappel_id) });
+    const rappel = await db.findOneAndDelete({ _id: rappel_id });
     if (!rappel)
       return erreur(
         "Rappel invalide ! Merci de choisir un rappel dans la liste !",

@@ -1,7 +1,6 @@
 import { MessageFlags, type ButtonInteraction } from "discord.js";
 import type { botClient } from "../../index.js";
 import { getDb } from "../../db/mongo.js";
-import { ObjectId } from "mongodb";
 import success from "../../functions/success.js";
 import Button from "../../class/button.js";
 import Container from "../../class/container.js";
@@ -15,28 +14,13 @@ export const event = async (
   await interaction.deferUpdate();
   const rappel_id = interaction.customId.split("_")[2]!;
   let actual_page = Number(interaction.customId.split("_")[3]);
-  const db = getDb().collection("Rappels");
-  await db.deleteOne({ _id: new ObjectId(rappel_id) });
+  const db = getDb().Rappels;
+  await db.deleteOne({ _id: rappel_id });
 
-  const rappels_full = (await db
-    .find({
-      user: interaction.user.id,
-    })
-    .toArray()) as Array<{
-    _id: ObjectId;
-    user: string;
-    message: string;
-    date: number;
-  }>;
-  let rappels = rappels_full.slice(
-    (actual_page - 1) * 3,
-    actual_page * 3
-  ) as Array<{
-    _id: ObjectId;
-    user: string;
-    message: string;
-    date: number;
-  }>;
+  const rappels_full = await db.find({
+    user: interaction.user.id,
+  });
+  let rappels = rappels_full.slice((actual_page - 1) * 3, actual_page * 3);
 
   if (rappels_full.length === 0)
     return warn("Vous n'avez plus de rappel !", interaction, {
@@ -44,15 +28,7 @@ export const event = async (
     });
 
   if (rappels.length === 0) {
-    rappels = rappels_full.slice(
-      (actual_page - 2) * 3,
-      (actual_page - 1) * 3
-    ) as Array<{
-      _id: ObjectId;
-      user: string;
-      message: string;
-      date: number;
-    }>;
+    rappels = rappels_full.slice((actual_page - 2) * 3, (actual_page - 1) * 3);
     actual_page--;
   }
 

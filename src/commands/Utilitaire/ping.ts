@@ -9,6 +9,7 @@ import { getDb } from "../../db/mongo.js";
 
 import config from "../../../config.json" with { type: "json" };
 import type { botClient } from "../../index.js";
+import mongoose from "mongoose";
 
 export const name = "ping";
 export const description =
@@ -29,12 +30,12 @@ export const cmd_builder = new SlashCommandBuilder()
 
 export const command = async (
   bot: botClient,
-  interaction: ChatInputCommandInteraction,
+  interaction: ChatInputCommandInteraction
 ) => {
   const ping = Date.now() - interaction.createdTimestamp;
   await interaction.deferReply();
 
-  const db = getDb();
+  const db = getDb().db;
   const now = Date.now();
   await db.admin().ping();
   const ping_db = Date.now() - now;
@@ -46,13 +47,11 @@ export const command = async (
           {
             name: "🔷 - API Discord",
             value: `**${bot.ws.ping}** ms`,
-            inline: true,
           },
-          { name: ":robot: - Bot", value: `**${ping}** ms`, inline: true },
+          { name: ":robot: - Bot", value: `**${ping}** ms` },
           {
             name: ":file_cabinet: - Base de données",
             value: `**${ping_db}** ms`,
-            inline: true,
           }
         )
         .setFooter({

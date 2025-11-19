@@ -1,16 +1,25 @@
-import { Db, MongoClient } from "mongodb";
+import mongoose, { Schema } from "mongoose";
 import * as dotenv from "dotenv";
 dotenv.config({ quiet: true });
-const client = new MongoClient(process.env.DB as string);
 
-let db: Db;
+let db: typeof mongoose;
 
-export async function connect() {
-  await client.connect();
-  db = client.db(process.env.DB_NAME);
-}
+export const connect = async () => {
+  db = await mongoose.connect(process.env.DB as string);
+  const rappel = new Schema({
+    user: { type: String, required: true },
+    message: { type: String, required: true },
+    date: { type: Number, required: true },
+    created_at: {
+      type: Number,
+      default: () => Date.now()
+    }
+  });
+  mongoose.model("Rappels", rappel);
+};
 
 export function getDb() {
-  if (!db) throw new Error("La base de données n'est pas encore connectée.");
-  return db;
+  if (!db || !db.connection.db)
+    throw new Error("La base de données n'est pas encore connectée.");
+  return { Rappels: db.models.Rappels!, db: db.connection.db };
 }

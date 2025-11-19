@@ -4,7 +4,6 @@ import { deployementSlash } from "../../handlers/slashCommands.js";
 import config from "../../../config.json" with { type: "json" };
 import { erreur } from "../../logger.js";
 import { getDb } from "../../db/mongo.js";
-import type { ObjectId } from "mongodb";
 
 export const type = "clientReady";
 
@@ -26,25 +25,22 @@ export const event = async (client: botClient) => {
   deployementSlash(client);
 
   // Mise en place des rappels
-  const db = getDb().collection("Rappels");
+  const db = getDb().Rappels;
   setInterval(async () => {
-    const rappels = (await db
+    const rappels = await db
       .find({ $expr: { $lt: ["$date", Date.now()] } })
-      .toArray()) as Array<{
-      _id: ObjectId;
-      user: string;
-      message: string;
-      date: number;
-    }>;
     if (!rappels[0]) return;
     for (const r of rappels) {
       const user = await client.users.fetch(r.user);
       await user.send({
         embeds: [
-          new EmbedBuilder().setColor(config.embed.normal).setTitle("🔔 - Rappel").setDescription(r.message),
+          new EmbedBuilder()
+            .setColor(config.embed.normal)
+            .setTitle("🔔 - Rappel")
+            .setDescription(r.message),
         ],
       });
-      await db.deleteOne({_id: r._id})
+      await db.deleteOne({ _id: r._id });
     }
   }, 60_000);
 

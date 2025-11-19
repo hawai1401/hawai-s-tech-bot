@@ -22,5 +22,14 @@ export default async function buttonInteraction(
   try {
     const interaction_file = await import(`./${interaction_name}.js`);
     interaction_file.event(client, interaction);
-  } catch {}
+  } catch {
+    return interaction.reply({
+      components: [
+        new Container("error").addText(
+          `### ${config.emojis.error} - Une erreur est survenue avec l'exécution de ce bouton !`
+        ),
+      ],
+      flags: [MessageFlags.IsComponentsV2, MessageFlags.Ephemeral],
+    });
+  }
 }

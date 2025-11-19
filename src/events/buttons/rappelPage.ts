@@ -1,7 +1,6 @@
 import { MessageFlags, type ButtonInteraction } from "discord.js";
 import type { botClient } from "../../index.js";
 import { getDb } from "../../db/mongo.js";
-import type { ObjectId } from "mongodb";
 import Container from "../../class/container.js";
 import Button from "../../class/button.js";
 import config from "../../../config.json" with { type: "json" };
@@ -13,17 +12,10 @@ export const event = async (
   await interaction.deferUpdate();
   const actual_page = Number(interaction.customId.split("_")[3]);
   const direction = interaction.customId.split("_")[2] as "left" | "right";
-  const db = getDb().collection("Rappels");
-  const rappels = (await db
-    .find({
-      user: interaction.user.id,
-    })
-    .toArray()) as Array<{
-    _id: ObjectId;
-    user: string;
-    message: string;
-    date: number;
-  }>;
+  const db = getDb().Rappels;
+  const rappels = await db.find({
+    user: interaction.user.id,
+  });
 
   const container = new Container("normal")
     .addText("### 🔔 - Liste de vos rappels")
