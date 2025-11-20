@@ -8,7 +8,8 @@ export const type = "messageCreate";
 export const event = async (client: botClient, message: Message) => {
   if (
     !message.content.startsWith(String(`${config.prefix}eval`)) ||
-    !config["owner-id"].includes(message.author.id)
+    !config["owner-id"].includes(message.author.id) ||
+    !config["beta-id"].includes(message.author.id)
   )
     return;
 

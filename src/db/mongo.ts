@@ -4,22 +4,64 @@ dotenv.config({ quiet: true });
 
 let db: typeof mongoose;
 
+interface Rappel {
+  user: string;
+  message: string;
+  date: number;
+  created_at: number;
+}
+
+interface Warn {
+  guild: string;
+  author: string;
+  user: string;
+  raison: string;
+  created_at: number;
+}
+
 export const connect = async () => {
   db = await mongoose.connect(process.env.DB as string);
-  const rappel = new Schema({
+  const rappels = new Schema({
     user: { type: String, required: true },
     message: { type: String, required: true },
     date: { type: Number, required: true },
     created_at: {
       type: Number,
-      default: () => Date.now()
-    }
+      default: () => Date.now(),
+    },
+  });  
+  const warns = new Schema({
+    guild: {
+      type: String,
+      required: true,
+    },
+    author: {
+      type: String,
+      required: true,
+    },
+    user: {
+      type: String,
+      required: true,
+    },
+    raison: {
+      type: String,
+      required: true,
+    },
+    created_at: {
+      type: Number,
+      default: () => Date.now(),
+    },
   });
-  mongoose.model("Rappels", rappel);
+  mongoose.model<Rappel>("Rappels", rappels);
+  mongoose.model<Warn>("Warns", warns);
 };
 
 export function getDb() {
   if (!db || !db.connection.db)
     throw new Error("La base de données n'est pas encore connectée.");
-  return { Rappels: db.models.Rappels!, db: db.connection.db };
+  return {
+    Rappels: db.models.Rappels as mongoose.Model<Rappel>,
+    Warns: db.models.Warns as mongoose.Model<Warn>,
+    db: db.connection.db,
+  };
 }
