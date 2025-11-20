@@ -87,9 +87,10 @@ export const command = async (
   const member_highthest_role = interaction_user.roles.highest.position;
   const user_highthest_role = user.roles.highest.position;
   if (
-    member_highthest_role <= user_highthest_role ||
-    interaction_user.id !== interaction.guild!.ownerId
-  )
+      (member_highthest_role <= user_highthest_role &&
+        interaction_user.id !== interaction.guild!.ownerId) ||
+      user.id === interaction.guild!.ownerId
+    )
     return erreur(
       "Vous ne pouvez pas rendre muet un utilisateur qui supérieur ou égal à vous !",
       interaction

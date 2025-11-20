@@ -47,7 +47,7 @@ export const cmd_builder = new SlashCommandBuilder()
         { name: "7 jours", value: "7" },
       ])
   )
-  .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers);
+  .setDefaultMemberPermissions(PermissionsBitField.Flags.BanMembers);
 
 export const command = async (
   client: botClient,
@@ -88,8 +88,9 @@ export const command = async (
     const member_highthest_role = interaction_user.roles.highest.position;
     const user_highthest_role = user.roles.highest.position;
     if (
-      member_highthest_role <= user_highthest_role ||
-      interaction_user.id !== interaction.guild!.ownerId
+      (member_highthest_role <= user_highthest_role &&
+        interaction_user.id !== interaction.guild!.ownerId) ||
+      user.id === interaction.guild!.ownerId
     )
       return erreur(
         "Vous ne pouvez pas bannir un utilisateur qui supérieur ou égal à vous !",

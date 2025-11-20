@@ -34,7 +34,7 @@ export const cmd_builder = new SlashCommandBuilder()
       )
   )
 
-  .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers);
+  .setDefaultMemberPermissions(PermissionsBitField.Flags.BanMembers);
 
 export const command = async (
   client: botClient,
