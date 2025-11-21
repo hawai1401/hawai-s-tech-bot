@@ -6,10 +6,8 @@ import {
   EmbedBuilder,
 } from "discord.js";
 import { getDb } from "../../db/mongo.js";
-
 import config from "../../../config.json" with { type: "json" };
 import type { botClient } from "../../index.js";
-import mongoose from "mongoose";
 
 export const name = "ping";
 export const description =
@@ -32,13 +30,17 @@ export const command = async (
   bot: botClient,
   interaction: ChatInputCommandInteraction
 ) => {
-  const ping = Date.now() - interaction.createdTimestamp;
   await interaction.deferReply();
 
   const db = getDb().db;
-  const now = Date.now();
+  const now = performance.now();
   await db.admin().ping();
-  const ping_db = Date.now() - now;
+  const ping_db = performance.now() - now;
+
+  const start = performance.now();
+  await fetch("https://discord.com/api");
+  const ping_api = (performance.now() - start) / 2;
+
   await interaction.editReply({
     embeds: [
       new EmbedBuilder()
@@ -46,12 +48,12 @@ export const command = async (
         .setFields(
           {
             name: "🔷 - API Discord",
-            value: `**${bot.ws.ping}** ms`,
+            value: `**${ping_api.toFixed(2)}** ms`,
           },
-          { name: ":robot: - Bot", value: `**${ping}** ms` },
+          { name: ":robot: - Bot", value: `**${bot.ws.ping}** ms` },
           {
             name: ":file_cabinet: - Base de données",
-            value: `**${ping_db}** ms`,
+            value: `**${ping_db.toFixed(2)}** ms`,
           }
         )
         .setFooter({

@@ -38,22 +38,17 @@ export const command = async (
   client: botClient,
   interaction: ChatInputCommandInteraction,
 ) => {
-  const cats: Record<
-    string,
-    { emoji: ComponentEmojiResolvable; description: string }
-  > = {
-    Accueil: { emoji: "🏠", description: "Accueil du menu d'aide." },
+  const cats: Record<string, { emoji: ComponentEmojiResolvable }> = {
+    Accueil: { emoji: "🏠" },
     Développeur: {
-      emoji: "1409160797346857112",
-      description: "Commandes réservées au développeur du bot.",
+      emoji: "<:activedeveloper:1409160797346857112>",
     },
-    Économie: { emoji: "🪙", description: "Soon..." },
+    Économie: { emoji: "🪙" },
     Informations: {
       emoji: "ℹ️",
-      description: "Commandes qui permettent d'obtenir des informations.",
     },
-    Modération: { emoji: "🛡️", description: "Commandes de modération." },
-    Utilitaire: { emoji: "📡", description: "Commandes utilitaires." },
+    Modération: { emoji: "🛡️" },
+    Utilitaire: { emoji: "📡" },
   };
 
   const selecteur = new StringSelectMenuBuilder()
@@ -61,7 +56,6 @@ export const command = async (
     .setPlaceholder("Catégorie")
     .addOptions(
       new selectMenuOption("Accueil", "Accueil", {
-        description: cats.Accueil!.description,
         emoji: cats.Accueil!.emoji,
         default: true,
       })
@@ -71,7 +65,6 @@ export const command = async (
   for (const folderName of categorie)
     selecteur.addOptions(
       new selectMenuOption(folderName, folderName, {
-        description: cats[folderName]!.description,
         emoji: cats[folderName]!.emoji,
       })
     );
