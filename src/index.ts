@@ -7,6 +7,9 @@ import {
   ButtonInteraction,
   type AnySelectMenuInteraction,
   ContainerBuilder,
+  Message,
+  type OmitPartialGroupDMChannel,
+  type PartialMessage,
 } from "discord.js";
 import { config } from "dotenv";
 config({ quiet: true });
@@ -24,11 +27,16 @@ export class botClient extends Client {
       ...any
     ]
   >;
+  public snipes: Collection<
+    string,
+    OmitPartialGroupDMChannel<Message<boolean> | PartialMessage<boolean>>
+  >;
 
   constructor(options: ConstructorParameters<typeof Client>[0]) {
     super(options);
     this.commands = new Collection();
     this.modals = new Collection();
+    this.snipes = new Collection();
   }
   // @ts-expect-error
   override user: ClientUser;

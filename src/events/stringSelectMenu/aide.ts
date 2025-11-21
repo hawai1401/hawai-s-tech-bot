@@ -33,6 +33,7 @@ export const event = async (
     },
     Modération: { emoji: "🛡️" },
     Utilitaire: { emoji: "📡" },
+    Message: {emoji: "💬"}
   };
 
   const selecteur = new StringSelectMenuBuilder()

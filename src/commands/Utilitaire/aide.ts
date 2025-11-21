@@ -49,6 +49,7 @@ export const command = async (
     },
     Modération: { emoji: "🛡️" },
     Utilitaire: { emoji: "📡" },
+    Message: {emoji: "💬"}
   };
 
   const selecteur = new StringSelectMenuBuilder()
