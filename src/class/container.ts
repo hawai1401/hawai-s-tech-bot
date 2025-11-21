@@ -288,9 +288,7 @@ export default class Container {
         );
         return this;
       }
-      console.log(this.container.components.length)
     this.container.spliceComponents(index, deleteCount);
-    console.log(this.container.components.length)
     return this;
   }
 

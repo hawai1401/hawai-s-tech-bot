@@ -4,7 +4,7 @@ import {
   EmbedBuilder,
   GuildMember,
   InteractionContextType,
-  PermissionsBitField,
+  PermissionFlagsBits,
   SlashCommandBuilder,
   User,
 } from "discord.js";
@@ -47,7 +47,7 @@ export const cmd_builder = new SlashCommandBuilder()
         { name: "7 jours", value: "7" },
       ])
   )
-  .setDefaultMemberPermissions(PermissionsBitField.Flags.BanMembers);
+  .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
 
 export const command = async (
   client: botClient,

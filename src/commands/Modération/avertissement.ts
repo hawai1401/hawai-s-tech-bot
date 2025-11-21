@@ -6,7 +6,7 @@ import {
   EmbedBuilder,
   InteractionContextType,
   MessageFlags,
-  PermissionsBitField,
+  PermissionFlagsBits,
   SlashCommandBuilder,
   type APIContainerComponent,
 } from "discord.js";
@@ -75,7 +75,7 @@ export const cmd_builder = new SlashCommandBuilder()
           .setAutocomplete(true)
       )
   )
-  .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageMessages);
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages);
 
 export const command = async (
   client: botClient,

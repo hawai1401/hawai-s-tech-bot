@@ -3,4 +3,4 @@ import type { botClient } from "../../index.js";
 
 export const type = "interactionCreate";
 
-export const event = async (interaction: Interaction, client: botClient) => {};
+export const event = async (client: botClient, interaction: Interaction) => {};

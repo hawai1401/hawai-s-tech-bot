@@ -4,7 +4,7 @@ import {
   ChatInputCommandInteraction,
   EmbedBuilder,
   InteractionContextType,
-  PermissionsBitField,
+  PermissionFlagsBits,
   SlashCommandBuilder,
 } from "discord.js";
 import type { botClient } from "../../index.js";
@@ -34,7 +34,7 @@ export const cmd_builder = new SlashCommandBuilder()
       )
       .setRequired(false)
   )
-  .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers);
+  .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers);
 
 export const command = async (
   client: botClient,

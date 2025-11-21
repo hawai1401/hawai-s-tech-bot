@@ -4,7 +4,7 @@ import {
   EmbedBuilder,
   GuildMember,
   InteractionContextType,
-  PermissionsBitField,
+  PermissionFlagsBits,
   SlashCommandBuilder,
   User,
 } from "discord.js";
@@ -34,7 +34,7 @@ export const cmd_builder = new SlashCommandBuilder()
       )
   )
 
-  .setDefaultMemberPermissions(PermissionsBitField.Flags.BanMembers);
+  .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
 
 export const command = async (
   client: botClient,
