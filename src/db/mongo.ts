@@ -24,12 +24,12 @@ export const connect = async () => {
   const rappels = new Schema({
     user: { type: String, required: true },
     message: { type: String, required: true },
-    date: { type: Number, required: true },
+    date: { immutable: true, type: Number, required: true },
     created_at: {
       type: Number,
       default: () => Date.now(),
     },
-  });  
+  });
   const warns = new Schema({
     guild: {
       type: String,
@@ -48,6 +48,7 @@ export const connect = async () => {
       required: true,
     },
     created_at: {
+      immutable: true,
       type: Number,
       default: () => Date.now(),
     },
