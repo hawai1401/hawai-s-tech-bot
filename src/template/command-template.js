@@ -5,10 +5,9 @@ import {
   ApplicationIntegrationType,
   MessageFlags,
 } from "discord.js";
-import { getDb } from "../../db/mongo.js";
-
-// import config from "../../../config.json" with { type: "json" };
 import type { botClient } from "../../index.js";
+import { getDb } from "../../db/mongo.js";
+// import config from "../../../config.json" with { type: "json" };
 
 export const name = "";
 export const description = "";
