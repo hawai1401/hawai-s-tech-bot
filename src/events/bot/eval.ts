@@ -14,11 +14,15 @@ export const event = async (client: botClient, message: Message) => {
     return;
 
   const require = createRequire(import.meta.url);
+  const { handleStop } = require("./clientReady");
   try {
+    
+    const code = message.content.slice(String(`${config.prefix}eval`).length + 1)
     const result = await eval(
-      `(async () => {${message.content.slice(
-        String(`${config.prefix}eval`).length + 1
-      )}})()`
+      `(async () => {
+        const stop = async () => handleStop(await client.channels.fetch("1413831946492055552"));
+      ${code}
+      })()`
     );
     const embed = new EmbedBuilder()
       .setTitle(

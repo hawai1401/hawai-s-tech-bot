@@ -1,9 +1,30 @@
-import { ActivityType, Collection, EmbedBuilder } from "discord.js";
+import {
+  ActivityType,
+  Collection,
+  EmbedBuilder,
+  MessageFlags,
+} from "discord.js";
 import type { botClient } from "../../index.js";
 import { deployementSlash } from "../../handlers/slashCommands.js";
 import config from "../../../config.json" with { type: "json" };
 import { erreur } from "../../logger.js";
 import { getDb } from "../../db/mongo.js";
+import mongoose from "mongoose";
+import Container from "../../class/container.js";
+
+export async function handleStop(salon: any) {
+  console.log("Déconnexion de la base de donnée...");
+  await mongoose.disconnect();
+  console.log("Base de donnée déconnectée avec succès !");
+  console.log("Envoi du message sur discord...");
+  await salon.send({
+    components: [new Container("warn").addText("### Arrêt du bot en cours...")],
+    flags: MessageFlags.IsComponentsV2,
+  });
+  console.log("Message envoyé avec succès !");
+  console.log("Arrêt du bot...");
+  process.exit(0);
+}
 
 export const type = "clientReady";
 
@@ -27,8 +48,7 @@ export const event = async (client: botClient) => {
   // Mise en place des rappels
   const db = getDb().Rappels;
   setInterval(async () => {
-    const rappels = await db
-      .find({ $expr: { $lt: ["$date", Date.now()] } })
+    const rappels = await db.find({ $expr: { $lt: ["$date", Date.now()] } });
     if (!rappels[0]) return;
     for (const r of rappels) {
       const user = await client.users.fetch(r.user);
@@ -45,9 +65,9 @@ export const event = async (client: botClient) => {
   }, 60_000);
 
   // Anti-Crash
+  const salon = await client.channels.fetch("1413831946492055552");
   process.on("uncaughtException", async (err, origin) => {
     erreur(origin, err);
-    const salon = await client.channels.fetch("1413831946492055552");
     const embed = new EmbedBuilder()
       .setTitle(`[ ANTI-CRASH ] - ${origin}`)
       .setDescription(
@@ -59,7 +79,6 @@ export const event = async (client: botClient) => {
   });
   process.on("uncaughtExceptionMonitor", async (err, origin) => {
     erreur(origin, err);
-    const salon = await client.channels.fetch("1413831946492055552");
     const embed = new EmbedBuilder()
       .setTitle(`[ ANTI-CRASH ] - ${origin}`)
       .setDescription(
@@ -71,8 +90,6 @@ export const event = async (client: botClient) => {
   });
   process.on("unhandledRejection", async (err, promise) => {
     erreur(promise, err);
-
-    const salon = await client.channels.fetch("1413831946492055552");
 
     const embed = new EmbedBuilder()
       .setTitle("[ ANTI-CRASH ] - unhandledRejection")
@@ -92,4 +109,57 @@ export const event = async (client: botClient) => {
     }
     (salon as any).send({ embeds: [embed] });
   });
+  client.on("error", async (e) => {
+    const embed = new EmbedBuilder()
+      .setTitle("[ ANTI-CRASH ] - Erreur du bot")
+      .setColor(config.embed.error)
+      .setTimestamp();
+
+    embed.setFields(
+      { name: "Message", value: `\`\`\`js\n${e.message}\`\`\`` },
+      {
+        name: "Stack",
+        value: `\`\`\`js\n${(e.stack || "").slice(0, 1000)}\`\`\``,
+      }
+    );
+
+    (salon as any).send({ embeds: [embed] });
+  });
+
+  // Autre
+  client.on("warn", async (w) => {
+    const embed = new EmbedBuilder()
+      .setTitle("[ WARN ] - Avertissement du bot")
+      .setColor(config.embed.warn)
+      .setTimestamp();
+
+    embed.setFields({ name: "Message", value: `\`\`\`js\n${w}\`\`\`` });
+
+    (salon as any).send({ embeds: [embed] });
+  });
+  process.on("warning", async (w) => {
+    const embed = new EmbedBuilder()
+      .setTitle("[ WARN ] - Avertissement")
+      .setColor(config.embed.warn)
+      .setTimestamp();
+
+    embed.setFields({ name: "Message", value: `\`\`\`js\n${w}\`\`\`` });
+
+    (salon as any).send({ embeds: [embed] });
+  });
+  process.on("message", async (m) => {
+    const embed = new EmbedBuilder()
+      .setTitle("[ MESSAGE ] - Message")
+      .setColor(config.embed.normal)
+      .setTimestamp();
+
+    embed.setFields({ name: "Message", value: `\`\`\`js\n${m}\`\`\`` });
+
+    (salon as any).send({ embeds: [embed] });
+  });
+  process.on("disconnect", () => {
+    console.log("c");
+  });
+  const stop_event = ["SIGINT", "SIGABRT", "SIGKILL", "SIGSTOP", "SIGTERM"];
+  for (const e of stop_event) process.on(e, () => handleStop(salon));
 };

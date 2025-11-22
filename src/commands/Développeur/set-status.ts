@@ -7,7 +7,6 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import type { botClient } from "../../index.js";
-
 import config from "../../../config.json" with { type: "json" };
 
 export const name = "set-status";
