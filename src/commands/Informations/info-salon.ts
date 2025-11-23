@@ -23,11 +23,7 @@ export const description = "Donne des informations sur un salon.";
 export const cmd_builder = new SlashCommandBuilder()
   .setName(name)
   .setDescription(description)
-  .setContexts([
-    InteractionContextType.BotDM,
-    InteractionContextType.Guild,
-    InteractionContextType.PrivateChannel,
-  ])
+  .setContexts([InteractionContextType.Guild])
   .setIntegrationTypes([
     ApplicationIntegrationType.GuildInstall,
     ApplicationIntegrationType.UserInstall,
