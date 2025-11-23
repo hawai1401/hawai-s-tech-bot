@@ -19,7 +19,7 @@ export const cmd_builder = new SlashCommandBuilder()
   .setDescription(description)
   .setContexts([InteractionContextType.Guild])
   .setIntegrationTypes([ApplicationIntegrationType.GuildInstall])
-  .addNumberOption((o) =>
+  .addIntegerOption((o) =>
     o
       .setName("nombre")
       .setDescription("Le nombre de message à supprimer.")
@@ -42,7 +42,7 @@ export const command = async (
     return erreur("Commande indisponible dans ce salon !", interaction);
   await interaction.deferReply({ flags: MessageFlags.Ephemeral });
   const msg = await interaction.channel!.bulkDelete(
-    interaction.options.getNumber("nombre", true),
+    interaction.options.getInteger("nombre", true),
     true
   );
   if (msg.size === 0)
