@@ -43,7 +43,7 @@ export const deployementEvent = async (client: botClient) => {
   }
 
   const logs_cat = fs.readdirSync("./dist/events/logs", { encoding: "utf-8" });
-  for (const folderName of categorie) {
+  for (const folderName of logs_cat) {
     const logs = fs.readdirSync(`./dist/events/logs/${folderName}`, {
       encoding: "utf-8",
     });

@@ -110,6 +110,7 @@ export const event = async (client: botClient) => {
     (salon as any).send({ embeds: [embed] });
   });
   client.on("error", async (e) => {
+    console.error(e)
     const embed = new EmbedBuilder()
       .setTitle("[ ANTI-CRASH ] - Erreur du bot")
       .setColor(config.embed.error)
