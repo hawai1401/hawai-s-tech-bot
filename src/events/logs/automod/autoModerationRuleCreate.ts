@@ -46,26 +46,26 @@ export const event = async (
         listenerType[autoModerationRule.triggerType]
       }\n**Déclencheur** : ${
         eventType[autoModerationRule.eventType]
-      }\n**Activé** : ${
-        autoModerationRule.enabled ? config.emojis.success : config.emojis.error
+      }\n**Status** : ${
+        autoModerationRule.enabled ? "Activé" : "Désactivé"
       }\n\n**Salons ignorés** :\n${
-        autoModerationRule.exemptChannels
+        autoModerationRule.exemptChannels.size > 0
           ? autoModerationRule.exemptChannels
               .map((c) => `- ${c} \`${c.name}\``)
               .slice(0, 10)
               .join("\n")
-          : "Aucun"
+          : "- Aucun"
       }${
         autoModerationRule.exemptChannels.size > 10
           ? `\n - Et ${autoModerationRule.exemptChannels.size - 10} autres...`
           : ""
-      }\n**Rôles ignorés** :\n${
-        autoModerationRule.exemptRoles
+      }\n\n**Rôles ignorés** :\n${
+        autoModerationRule.exemptRoles.size > 0
           ? autoModerationRule.exemptRoles
               .map((r) => `- ${r} \`${r.name}\``)
               .slice(0, 10)
               .join("\n")
-          : "Aucun"
+          : "- Aucun"
       }${
         autoModerationRule.exemptRoles.size > 10
           ? `\n- Et ${autoModerationRule.exemptRoles.size - 10} autres...`
@@ -86,47 +86,57 @@ export const event = async (
     autoModerationRule.triggerMetadata.presets.length > 0
   ) {
     const getValue = () => {
-      let value = "";
+      let value = [];
       if (autoModerationRule.triggerMetadata.keywordFilter.length > 0)
-        value += `**Liste des mots bloqués** : ${autoModerationRule.triggerMetadata.keywordFilter
-          .map((w) => `\n- ${w}`)
-          .slice(0, 5)
-          .join("")}${
-          autoModerationRule.triggerMetadata.keywordFilter.length > 10
-            ? `\n- Et ${
-                autoModerationRule.triggerMetadata.keywordFilter.length - 10
-              } autres...`
-            : ""
-        }`;
+        value.push(
+          `**Liste des mots bloqués** : ${autoModerationRule.triggerMetadata.keywordFilter
+            .map((w) => `\n- ${w}`)
+            .slice(0, 5)
+            .join("")}${
+            autoModerationRule.triggerMetadata.keywordFilter.length > 10
+              ? `\n- Et ${
+                  autoModerationRule.triggerMetadata.keywordFilter.length - 10
+                } autres...`
+              : ""
+          }`
+        );
       if (autoModerationRule.triggerMetadata.regexPatterns.length > 0)
-        value += `\n**Liste des regexs bloqués** : ${autoModerationRule.triggerMetadata.regexPatterns
-          .map((r) => `\n- ${r}`)
-          .slice(0, 5)
-          .join("")}${
-          autoModerationRule.triggerMetadata.regexPatterns.length > 10
-            ? `\n- Et ${
-                autoModerationRule.triggerMetadata.regexPatterns.length - 10
-              } autres...`
-            : ""
-        }`;
+        value.push(
+          `**Liste des regexs bloqués** : ${autoModerationRule.triggerMetadata.regexPatterns
+            .map((r) => `\n- ${r}`)
+            .slice(0, 5)
+            .join("")}${
+            autoModerationRule.triggerMetadata.regexPatterns.length > 10
+              ? `\n- Et ${
+                  autoModerationRule.triggerMetadata.regexPatterns.length - 10
+                } autres...`
+              : ""
+          }`
+        );
       if (autoModerationRule.triggerMetadata.presets.length > 0)
-        value += `\n**Liste de mots prédéfinies actives** : ${autoModerationRule.triggerMetadata.presets
-          .map((l) => `\n- ${listName[l]}`)
-          .join("")}`;
+        value.push(
+          `**Liste de mots prédéfinies actives** : ${autoModerationRule.triggerMetadata.presets
+            .map((l) => `\n- ${listName[l]}`)
+            .join("")}`
+        );
       if (autoModerationRule.triggerMetadata.allowList.length > 0)
-        value += `\n**Liste des mots autorisés** : ${autoModerationRule.triggerMetadata.allowList
-          .map((w) => `\n- ${w}`)
-          .slice(0, 5)
-          .join("")}${
-          autoModerationRule.triggerMetadata.allowList.length > 10
-            ? `\n- Et ${
-                autoModerationRule.triggerMetadata.allowList.length - 10
-              } autres...`
-            : ""
-        }`;
+        value.push(
+          `**Liste des mots autorisés** : ${autoModerationRule.triggerMetadata.allowList
+            .map((w) => `\n- ${w}`)
+            .slice(0, 5)
+            .join("")}${
+            autoModerationRule.triggerMetadata.allowList.length > 10
+              ? `\n- Et ${
+                  autoModerationRule.triggerMetadata.allowList.length - 10
+                } autres...`
+              : ""
+          }`
+        );
       if (autoModerationRule.triggerMetadata.mentionTotalLimit)
-        value += `\n**Nombre de mention maximum par message** : ${autoModerationRule.triggerMetadata.mentionTotalLimit}`;
-      return value;
+        value.push(
+          `**Nombre de mention maximum par message** : ${autoModerationRule.triggerMetadata.mentionTotalLimit}`
+        );
+      return value.join("\n\n");
     };
     embed.addFields({
       name: "🔧 - Avancé",
@@ -148,10 +158,9 @@ export const event = async (
             msg += `\n  - Durée : ${ms(a.metadata.durationSeconds * 1000, {
               long: true,
             })}`;
-          msg += "\n";
           return msg;
         })
-        .join("")}`,
+        .join("\n")}`,
     });
 
   const channel = (await client.channels.fetch(
