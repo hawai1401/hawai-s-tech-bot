@@ -4,13 +4,11 @@ import {
   InteractionContextType,
   ApplicationIntegrationType,
   ChannelType,
-  NewsChannel,
-  ForumChannel,
-  StageChannel,
-  TextChannel,
-  VoiceChannel,
   EmbedBuilder,
   CategoryChannel,
+  MediaChannel,
+  ThreadChannel,
+  GuildChannel,
 } from "discord.js";
 import type { botClient } from "../../index.js";
 import erreur from "../../functions/error.js";
@@ -47,14 +45,7 @@ export const command = async (
   interaction: ChatInputCommandInteraction
 ) => {
   const channel =
-    (interaction.options.getChannel("salon") as
-      | NewsChannel
-      | ForumChannel
-      | StageChannel
-      | TextChannel
-      | VoiceChannel
-      | CategoryChannel
-      | null) || interaction.channel;
+    interaction.options.getChannel("salon") || interaction.channel;
   const channelTypes = {
     0: "Textuel",
     1: "Message Privé",
@@ -70,10 +61,19 @@ export const command = async (
     15: "Forum",
     16: "Média",
   };
-  if (!channel || channel.isThread() || channel.isDMBased())
+  if (
+    !channel ||
+    channel instanceof MediaChannel ||
+    channel instanceof ThreadChannel ||
+    channel.type === ChannelType.GuildMedia ||
+    channel.type === ChannelType.DM ||
+    channel.type === ChannelType.GroupDM
+  )
     return erreur("Salon invalide !", interaction);
-
-  if (!(channel instanceof CategoryChannel))
+  if (
+    !(channel instanceof CategoryChannel) &&
+    channel instanceof GuildChannel
+  ) {
     return await interaction.reply({
       embeds: [
         new EmbedBuilder()
@@ -98,7 +98,7 @@ export const command = async (
           })
           .addFields({
             name: "📚 - Informations avancées",
-            value: `>>> **Model lent** : ${
+            value: `>>> **Mode lent** : ${
               channel.rateLimitPerUser
                 ? ms(channel.rateLimitPerUser * 1000, { long: true })
                 : config.emojis.error
@@ -108,18 +108,57 @@ export const command = async (
           }),
       ],
     });
-  await interaction.reply({
-    embeds: [
-      new EmbedBuilder().setColor(config.embed.normal).addFields({
-        name: "ℹ️ - Informations",
-        value: `>>> **ID** : ${channel.id}\n**Nom** : <#${channel.id}> \`${
-          channel.name
-        }\`\n**Créé** <t:${Math.floor(
-          channel.createdTimestamp / 1000
-        )}:R> (<t:${Math.floor(
-          channel.createdTimestamp / 1000
-        )}:F>)\n**Type de salon** : ${channelTypes[channel.type]}`,
-      }),
-    ],
-  });
+  } else if (channel instanceof CategoryChannel) {
+    return await interaction.reply({
+      embeds: [
+        new EmbedBuilder().setColor(config.embed.normal).addFields({
+          name: "ℹ️ - Informations",
+          value: `>>> **ID** : ${channel.id}\n**Nom** : <#${channel.id}> \`${
+            channel.name
+          }\`\n**Créé** <t:${Math.floor(
+            channel.createdTimestamp / 1000
+          )}:R> (<t:${Math.floor(
+            channel.createdTimestamp / 1000
+          )}:F>)\n**Type de salon** : ${channelTypes[channel.type]}`,
+        }),
+      ],
+    });
+  } else {
+    try {
+      return await interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(config.embed.normal)
+            .addFields({
+              name: "ℹ️ - Informations",
+              value: `>>> **ID** : ${channel.id}\n**Catégorie** : ${
+                // @ts-expect-error
+                channel.parent_id
+                  ? // @ts-expect-error
+                    `<#${channel.parent_id}>`
+                  : "Aucune"
+              }\n**Nom** : <#${channel.id}> \`${
+                channel.name
+              }\`\n**Description** : ${
+                // @ts-expect-error
+                channel?.topic ? channel.topic : "Aucune"
+              }\n**Type de salon** : ${channelTypes[channel.type]}`,
+            })
+            .addFields({
+              name: "📚 - Informations avancées",
+              value: `>>> **Mode lent** : ${
+                // @ts-expect-error
+                channel.rateLimitPerUser
+                  ? // @ts-expect-error
+                    ms(channel.rateLimitPerUser * 1000, { long: true })
+                  : config.emojis.error
+              }\n**NSFW** : ${
+                // @ts-expect-error
+                channel.nsfw ? config.emojis.success : config.emojis.error
+              }`,
+            }),
+        ],
+      });
+    } catch {}
+  }
 };
