@@ -1,5 +1,6 @@
 import {
   AuditLogEvent,
+  ChannelType,
   EmbedBuilder,
   type TextChannel,
   type VoiceState,
@@ -14,7 +15,12 @@ export const event = async (
   oldState: VoiceState,
   newState: VoiceState
 ) => {
-  if (!newState.member) return;
+  if (
+    !newState.member ||
+    oldState.channel?.type === ChannelType.GuildStageVoice ||
+    newState.channel?.type === ChannelType.GuildStageVoice
+  )
+    return;
   const user = await client.users.fetch(newState.member.id);
   const channel = (await client.channels.fetch(
     "1443680371379015720"
