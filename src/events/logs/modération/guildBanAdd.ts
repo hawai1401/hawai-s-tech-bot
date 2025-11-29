@@ -13,7 +13,6 @@ export const event = async (client: botClient, ban: GuildBan) => {
   const log = (
     await ban.guild.fetchAuditLogs({
       type: AuditLogEvent.MemberBanAdd,
-      user: ban.user,
       limit: 1,
     })
   ).entries.first();

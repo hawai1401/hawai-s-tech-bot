@@ -6,13 +6,13 @@ import {
   Message,
   type OmitPartialGroupDMChannel,
 } from "discord.js";
-import type { botClient } from "../../index.js";
+import type { botClient, prefixCommand_data } from "../../index.js";
 import Button from "../../class/button.js";
 import banner from "../../Modules/banner-tag.js";
 import pdp from "../../Modules/pdp-decoration.js";
 import config from "../../../config.json" with { type: "json" };
 
-export const data = {
+export const data: prefixCommand_data = {
   name: "info-utilisateur",
   alias: ["iu", "ui"],
 };
@@ -54,7 +54,7 @@ export const command = async (
   const user =
     message.mentions.users.first() ??
     (args[0]
-      ? await client.users.fetch(args[0]!, { force: true })
+      ? await client.users.fetch(args[0], { force: true })
       : message.author);
 
   let guild_user: GuildMember | undefined;

@@ -1,12 +1,13 @@
 import { Message, type OmitPartialGroupDMChannel } from "discord.js";
-import type { botClient } from "../../index.js";
+import type { botClient, prefixCommand_data } from "../../index.js";
 import erreurMsg from "../../functions/errorMsg.js";
 import successMsg from "../../functions/successMsg.js";
 
-export const data = {
+export const data: prefixCommand_data = {
   name: "clear",
-  alias: ["cls"]
-}
+  alias: ["cls"],
+  permission: "ManageMessages",
+};
 
 export const command = async (
   client: botClient,
@@ -16,15 +17,6 @@ export const command = async (
   if (!message.guild!.members.me!.permissions.has("ManageMessages"))
     return erreurMsg(
       "Je n'ai pas la permission de gérer les messages !",
-      message
-    );
-  if (
-    !(await message.guild!.members.fetch(message.author.id)).permissions.has(
-      "ManageMessages"
-    )
-  )
-    return erreurMsg(
-      "Vous n'avez pas la permission de gérer les messages !",
       message
     );
   if (message.channel!.isDMBased())

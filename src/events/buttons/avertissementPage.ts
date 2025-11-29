@@ -47,9 +47,9 @@ export const event = async (
         .addText(
           `### Avertissement n°${
             avertissements.findIndex((av) => av === a) + 1
-          }\n>>> **Date** : <t:${a.created_at / 1000}:F> \n**Raison** : ${
-            a.raison
-          }\n**Autheur** : <@${a.author}>`
+          }\n>>> **ID** : ${a._id}\n**Date** : <t:${
+            a.created_at / 1000
+          }:F> \n**Raison** : ${a.raison}\n**Autheur** : <@${a.author}>`
         )
         .addSeparator("Small");
 

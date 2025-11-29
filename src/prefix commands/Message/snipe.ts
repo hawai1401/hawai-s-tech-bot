@@ -3,14 +3,15 @@ import {
   Message,
   type OmitPartialGroupDMChannel,
 } from "discord.js";
-import type { botClient } from "../../index.js";
+import type { botClient, prefixCommand_data } from "../../index.js";
 import config from "../../../config.json" with { type: "json" }
 import erreurMsg from "../../functions/errorMsg.js";
 
-export const data = {
+export const data: prefixCommand_data = {
   name: "snipe",
-  alias: []
-}
+  alias: [],
+  permission: "ManageMessages",
+};
 
 export const command = async (
   client: botClient,

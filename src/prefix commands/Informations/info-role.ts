@@ -3,11 +3,11 @@ import {
   Message,
   type OmitPartialGroupDMChannel,
 } from "discord.js";
-import type { botClient } from "../../index.js";
+import type { botClient, prefixCommand_data } from "../../index.js";
 import config from "../../../config.json" with { type: "json" };
 import erreurMsg from "../../functions/errorMsg.js";
 
-export const data = {
+export const data: prefixCommand_data = {
   name: "info-role",
   alias: ["ir", "ri"],
 };
@@ -73,7 +73,7 @@ export const command = async (
   };
   const role =
     message.mentions.roles.first() ??
-    (args[0] ? await message.guild!.roles.fetch(args[0]!) : null);
+    (args[0] ? await message.guild!.roles.fetch(args[0]) : null);
   if (!role) return erreurMsg("Rôle invalide !", message);
 
   const embed = new EmbedBuilder()

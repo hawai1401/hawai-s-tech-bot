@@ -11,11 +11,18 @@ import {
   type OmitPartialGroupDMChannel,
   type PartialMessage,
   type Interaction,
+  type PermissionResolvable,
 } from "discord.js";
 import { config } from "dotenv";
 config({ quiet: true });
 import { connect } from "./db/mongo.js";
 import { deployementEvent } from "./handlers/events.js";
+
+export interface prefixCommand_data {
+  name: string;
+  alias: Array<string>;
+  permission?: PermissionResolvable;
+}
 
 export class botClient extends Client {
   public commands: Collection<
@@ -23,10 +30,7 @@ export class botClient extends Client {
     (client: botClient, interaction: Interaction) => Promise<void>
   >;
   public prefixCommands: Collection<
-    {
-      name: string;
-      alias: Array<string>;
-    },
+    prefixCommand_data,
     (
       client: botClient,
       message: OmitPartialGroupDMChannel<Message<boolean>>,

@@ -7,12 +7,12 @@ import {
   Message,
   type OmitPartialGroupDMChannel,
 } from "discord.js";
-import type { botClient } from "../../index.js";
+import type { botClient, prefixCommand_data } from "../../index.js";
 import ms from "ms";
 import config from "../../../config.json" with { type: "json" };
 import erreurMsg from "../../functions/errorMsg.js";
 
-export const data = {
+export const data: prefixCommand_data = {
   name: "info-salon",
   alias: ["isa", "ic", "ci"],
 };
@@ -24,7 +24,7 @@ export const command = async (
 ) => {
   const channel =
     message.mentions.channels.first() ??
-    (args[0] ? await message.guild!.channels.fetch(args[0]!) : message.channel);
+    (args[0] ? await message.guild!.channels.fetch(args[0]) : message.channel);
   const channelTypes = {
     0: "Textuel",
     1: "Message Privé",

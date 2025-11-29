@@ -2,7 +2,6 @@ import {
   ApplicationIntegrationType,
   ChatInputCommandInteraction,
   EmbedBuilder,
-  GuildMember,
   InteractionContextType,
   PermissionFlagsBits,
   SlashCommandBuilder,
@@ -44,13 +43,7 @@ export const command = async (
   const interaction_user = await interaction.guild!.members.fetch(
     interaction.user.id
   );
-  let user: User | GuildMember = interaction.options.getUser(
-    "utilisateur",
-    true
-  );
-  try {
-    user = await interaction.guild!.members.fetch(user.id);
-  } catch {}
+  const user: User = interaction.options.getUser("utilisateur", true);
   const raison =
     interaction.options.getString("raison") || "Aucune raison fournie";
 
@@ -65,31 +58,6 @@ export const command = async (
     return erreur("Je suis déjà là :stuck_out_tongue:", interaction, {
       isDefered: true,
     });
-
-  // Utilisateur est au-dessus de la personne à ban ?
-  if (user instanceof GuildMember) {
-    const member_highthest_role = interaction_user.roles.highest.position;
-    const user_highthest_role = user.roles.highest.position;
-    if (
-      member_highthest_role <= user_highthest_role ||
-      interaction_user.id !== interaction.guild!.ownerId
-    )
-      return erreur(
-        "Vous ne pouvez pas débannir un utilisateur qui supérieur ou égal à vous !",
-        interaction,
-        { isDefered: true }
-      );
-
-    if (
-      interaction.guild!.members.me!.roles.highest.position <=
-      user_highthest_role
-    )
-      return erreur(
-        "Mon rôle dans la hiérarchie est inférieur ou égale à celui du membre que vous souhaitez débannir !",
-        interaction,
-        { isDefered: true }
-      );
-  }
 
   // Bot peut ban la personne ?
   if (!interaction.appPermissions.has("BanMembers"))
