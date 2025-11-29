@@ -11,6 +11,7 @@ import { erreur } from "../../logger.js";
 import { getDb } from "../../db/mongo.js";
 import mongoose from "mongoose";
 import Container from "../../class/container.js";
+import { deployementPrefix } from "../../handlers/prefixCommands.js";
 
 export async function handleStop(salon: any) {
   console.log("Déconnexion de la base de donnée...");
@@ -42,8 +43,10 @@ export const event = async (client: botClient) => {
   });
 
   // Déployer les slash commandes
-  client.commands = new Collection();
-  deployementSlash(client);
+  await deployementSlash(client);
+
+  // Déployer les prefix commandes
+  await deployementPrefix(client)
 
   // Mise en place des rappels
   const db = getDb().Rappels;

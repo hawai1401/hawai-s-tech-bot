@@ -107,38 +107,46 @@ export function eventSlash(
   );
 }
 
-export function deployementSlash(
-  name: string,
-  success: boolean,
-  owner: boolean = false
-) {
-  if (owner === true) {
-    const reset_color = `\x1b[0m\x1b[3${colorCodes.blanc}m`;
-    const text_color = `\x1b[0m\x1b[3${colorCodes.jaune}m`;
-    const status_color = `\x1b[0m\x1b[3${colorCodes.vert}m`;
+export function deployementSlash(name: string, success: boolean) {
+  const reset_color = `\x1b[0m\x1b[3${colorCodes.blanc}m`;
+  const text_color = `\x1b[0m\x1b[3${colorCodes.bleu}m`;
+  const cmd = text_color + name + reset_color;
+  const nom = text_color + "CMD" + reset_color;
 
-    const cmd = text_color + name + reset_color;
-    const nom = text_color + "CMD" + reset_color;
+  if (success === true) {
+    const status_color = `\x1b[0m\x1b[3${colorCodes.vert}m`;
     const statut = status_color + "Success" + reset_color;
 
     console.log(`${reset_color}[ ${nom} ][ ${statut} ][ ${cmd} ]`);
   } else {
-    const reset_color = `\x1b[0m\x1b[3${colorCodes.blanc}m`;
-    const text_color = `\x1b[0m\x1b[3${colorCodes.bleu}m`;
-    const cmd = text_color + name + reset_color;
-    const nom = text_color + "CMD" + reset_color;
+    const status_color = `\x1b[0m\x1b[3${colorCodes.rouge}m`;
+    const statut = status_color + "Failed" + reset_color;
 
-    if (success === true) {
-      const status_color = `\x1b[0m\x1b[3${colorCodes.vert}m`;
-      const statut = status_color + "Success" + reset_color;
+    console.log(`${reset_color}[ ${nom} ][ ${statut} ][ ${cmd} ]`);
+  }
+}
 
-      console.log(`${reset_color}[ ${nom} ][ ${statut} ][ ${cmd} ]`);
-    } else {
-      const status_color = `\x1b[0m\x1b[3${colorCodes.rouge}m`;
-      const statut = status_color + "Failed" + reset_color;
+export function deployementPrefix(name: string, success: boolean) {
+  const reset_color = `\x1b[0m\x1b[3${colorCodes.blanc}m`;
+  const text_color = `\x1b[0m\x1b[3${colorCodes.jaune}m`;
+  const status_color = `\x1b[0m\x1b[3${colorCodes.vert}m`;
 
-      console.log(`${reset_color}[ ${nom} ][ ${statut} ][ ${cmd} ]`);
-    }
+  const cmd = text_color + name + reset_color;
+  const nom = text_color + "CMD" + reset_color;
+  const statut = status_color + "Success" + reset_color;
+
+  console.log(`${reset_color}[ ${nom} ][ ${statut} ][ ${cmd} ]`);
+
+  if (success === true) {
+    const status_color = `\x1b[0m\x1b[3${colorCodes.vert}m`;
+    const statut = status_color + "Success" + reset_color;
+
+    console.log(`${reset_color}[ ${nom} ][ ${statut} ][ ${cmd} ]`);
+  } else {
+    const status_color = `\x1b[0m\x1b[3${colorCodes.rouge}m`;
+    const statut = status_color + "Failed" + reset_color;
+
+    console.log(`${reset_color}[ ${nom} ][ ${statut} ][ ${cmd} ]`);
   }
 }
 

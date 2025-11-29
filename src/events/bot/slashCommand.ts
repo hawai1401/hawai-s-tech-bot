@@ -29,5 +29,5 @@ export const event = async (client: botClient, interaction: Interaction) => {
     );
   }
 
-  await (command as command)(client, interaction);
+  await command(client, interaction);
 };

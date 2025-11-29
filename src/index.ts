@@ -10,6 +10,7 @@ import {
   Message,
   type OmitPartialGroupDMChannel,
   type PartialMessage,
+  type Interaction,
 } from "discord.js";
 import { config } from "dotenv";
 config({ quiet: true });
@@ -17,7 +18,18 @@ import { connect } from "./db/mongo.js";
 import { deployementEvent } from "./handlers/events.js";
 
 export class botClient extends Client {
-  public commands: Collection<string, void>;
+  public commands: Collection<
+    string,
+    (client: botClient, interaction: Interaction) => Promise<void>
+  >;
+  public prefixCommands: Collection<
+    string,
+    (
+      client: botClient,
+      message: OmitPartialGroupDMChannel<Message<boolean>>,
+      args: Array<string>
+    ) => Promise<void>
+  >;
   public modals: Collection<
     string,
     [
@@ -35,6 +47,7 @@ export class botClient extends Client {
   constructor(options: ConstructorParameters<typeof Client>[0]) {
     super(options);
     this.commands = new Collection();
+    this.prefixCommands = new Collection();
     this.modals = new Collection();
     this.snipes = new Collection();
   }

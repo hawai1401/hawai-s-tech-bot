@@ -3,10 +3,7 @@ import type { botClient } from "../index.js";
 import { REST, Routes } from "discord.js";
 import config from "../../config.json" with {type: "json"};
 import * as logs from "../logger.js";
-
 import fs from "fs";
-
-const whitelist = ["pdp-decoration.js", "pdp", "banner-tag.js", "banner"];
 
 export const deployementSlash = async (bot: botClient) => {
   // Création de la liste des commandes
@@ -22,7 +19,7 @@ export const deployementSlash = async (bot: botClient) => {
       encoding: "utf-8",
     });
     for (const command of commands) {
-      if (command.endsWith(".js") && !whitelist.includes(command)) {
+      if (command.endsWith(".js")) {
         const actual_command = await import(
           `../commands/${folderName}/${command}`
         );
@@ -57,13 +54,11 @@ export const deployementSlash = async (bot: botClient) => {
         }
       } else {
         // Gestion des erreurs
-        if (!whitelist.includes(command)) {
-          console.info(`Un fichier inconnu a été trouvé !`);
-          console.group();
-          console.log(`Emplacement : /commands/${folderName}/`);
-          console.log(`Fichier : ${command}`);
-          console.groupEnd();
-        }
+        console.info(`Un fichier inconnu a été trouvé !`);
+        console.group();
+        console.log(`Emplacement : /commands/${folderName}/`);
+        console.log(`Fichier : ${command}`);
+        console.groupEnd();
       }
     }
   }
@@ -74,17 +69,15 @@ export const deployementSlash = async (bot: botClient) => {
     process.env.TOKEN_DEV as string
   );
 
-  await (async () => {
-    try {
-      console.log("Déploiement globales des slash commandes ...");
+  try {
+    console.log("Déploiement globales des slash commandes ...");
 
-      await rest.put(Routes.applicationCommands(config["bot-id"]), {
-        body: tab_commands,
-      });
+    await rest.put(Routes.applicationCommands(config["bot-id"]), {
+      body: tab_commands,
+    });
 
-      console.log("Commandes globales déployées avec succès !");
-    } catch (error) {
-      console.error(error);
-    }
-  })();
+    console.log("Commandes globales déployées avec succès !");
+  } catch (error) {
+    console.error(error);
+  }
 };
