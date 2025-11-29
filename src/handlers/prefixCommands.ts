@@ -16,14 +16,14 @@ export const deployementPrefix = async (bot: botClient) => {
         const actual_command = await import(
           `../prefix commands/${folderName}/${command}`
         );
-        if (actual_command.name) {
+        if (actual_command.data) {
           // Config la commande
           try {
-            bot.prefixCommands.set(actual_command.name, actual_command.command);
-            logs.deployementPrefix(actual_command.name, true);
+            bot.prefixCommands.set(actual_command.data, actual_command.command);
+            logs.deployementPrefix(actual_command.data.name, true);
           } catch (error) {
             // Gestion des erreurs
-            logs.deployementPrefix(actual_command.name, false);
+            logs.deployementPrefix(actual_command.data.name, false);
 
             console.error(`Une erreur est survenue avec une commande !`);
             console.group();
@@ -34,7 +34,10 @@ export const deployementPrefix = async (bot: botClient) => {
           }
         } else {
           // Gestion des erreurs
-          logs.deployementPrefix(command, false);
+          logs.deployementPrefix(
+            command.slice(command.length, command.length - 3),
+            false
+          );
 
           console.error(`Une erreur est survenue avec une commande !`);
           console.group();

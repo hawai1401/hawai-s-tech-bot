@@ -1,33 +1,12 @@
-import {
-  SlashCommandBuilder,
-  InteractionContextType,
-  ApplicationIntegrationType,
-  PermissionFlagsBits,
-  Message,
-  type OmitPartialGroupDMChannel,
-} from "discord.js";
+import { Message, type OmitPartialGroupDMChannel } from "discord.js";
 import type { botClient } from "../../index.js";
 import erreurMsg from "../../functions/errorMsg.js";
 import successMsg from "../../functions/successMsg.js";
 
-export const name = "clear";
-export const description =
-  "Effacer des messages en masse datant de moins de 14 jours.";
-
-export const cmd_builder = new SlashCommandBuilder()
-  .setName(name)
-  .setDescription(description)
-  .setContexts([InteractionContextType.Guild])
-  .setIntegrationTypes([ApplicationIntegrationType.GuildInstall])
-  .addIntegerOption((o) =>
-    o
-      .setName("nombre")
-      .setDescription("Le nombre de message à supprimer.")
-      .setRequired(true)
-      .setMinValue(1)
-      .setMaxValue(100)
-  )
-  .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages);
+export const data = {
+  name: "clear",
+  alias: ["cls"]
+}
 
 export const command = async (
   client: botClient,
@@ -36,7 +15,7 @@ export const command = async (
 ) => {
   if (!message.guild!.members.me!.permissions.has("ManageMessages"))
     return erreurMsg(
-      "Je n'ai pas la permission de supprimer des messages !",
+      "Je n'ai pas la permission de gérer les messages !",
       message
     );
   if (
@@ -45,7 +24,7 @@ export const command = async (
     )
   )
     return erreurMsg(
-      "Vous n'avez pas la permission de supprimer des messages !",
+      "Vous n'avez pas la permission de gérer les messages !",
       message
     );
   if (message.channel!.isDMBased())

@@ -7,7 +7,10 @@ import type { botClient } from "../../index.js";
 import config from "../../../config.json" with { type: "json" }
 import erreurMsg from "../../functions/errorMsg.js";
 
-export const name = "snipe";
+export const data = {
+  name: "snipe",
+  alias: []
+}
 
 export const command = async (
   client: botClient,
@@ -20,7 +23,7 @@ export const command = async (
     )
   )
     return erreurMsg(
-      "Vous n'avez pas la permission de supprimer des messages !",
+      "Vous n'avez pas la permission de gérer les messages !",
       message
     );
   const msg = client.snipes.get(message.channelId);

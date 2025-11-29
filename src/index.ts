@@ -23,7 +23,10 @@ export class botClient extends Client {
     (client: botClient, interaction: Interaction) => Promise<void>
   >;
   public prefixCommands: Collection<
-    string,
+    {
+      name: string;
+      alias: Array<string>;
+    },
     (
       client: botClient,
       message: OmitPartialGroupDMChannel<Message<boolean>>,

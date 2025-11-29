@@ -82,7 +82,7 @@ export const command = async (
             name: "ℹ️ - Informations",
             value: `>>> **ID** : ${channel.id}\n**Catégorie** : ${
               channel.parent
-                ? `${channel.parent.name} \`${channel.name}\``
+                ? `${channel.parent.name} \`${channel.parent.name}\``
                 : config.emojis.error
             }\n**Nom** : <#${channel.id}> \`${
               channel.name

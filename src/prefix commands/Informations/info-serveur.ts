@@ -1,69 +1,37 @@
 import {
-  ApplicationIntegrationType,
-  ChatInputCommandInteraction,
   EmbedBuilder,
   Guild,
-  InteractionContextType,
-  SlashCommandBuilder,
+  Message,
+  type OmitPartialGroupDMChannel,
 } from "discord.js";
 import type { botClient } from "../../index.js";
 import { ActionRowBuilder } from "discord.js";
 import Button from "../../class/button.js";
 import config from "../../../config.json" with { type: "json" };
-import erreur from "../../functions/error.js";
+import erreurMsg from "../../functions/errorMsg.js";
 
-export const name = "info-serveur";
-export const description = "Donne des informations sur un serveur.";
-
-export const cmd_builder = new SlashCommandBuilder()
-  .setName(name)
-  .setDescription(description)
-  .addStringOption((option) =>
-    option
-      .setName("serveur_id")
-      .setDescription(
-        "L'identifiant du serveur dont vous souhaitez avoir les informations."
-      )
-      .setRequired(false)
-  )
-  .setContexts([
-    InteractionContextType.BotDM,
-    InteractionContextType.Guild,
-    InteractionContextType.PrivateChannel,
-  ])
-  .setIntegrationTypes([
-    ApplicationIntegrationType.GuildInstall,
-    ApplicationIntegrationType.UserInstall,
-  ]);
+export const data = {
+  name: "info-serveur",
+  alias: ["ise", "si"],
+};
 
 export const command = async (
   client: botClient,
-  interaction: ChatInputCommandInteraction
+  message: OmitPartialGroupDMChannel<Message<boolean>>,
+  args: Array<string>
 ) => {
-  if (
-    !interaction.inCachedGuild() &&
-    !interaction.options.getString("serveur_id")
-  )
-    return erreur(
-      "Merci de faire la commande dans un serveur ou de remplire l'option `serveur_id`",
-      interaction
-    );
   const guild: Guild | null = await new Promise(async (res) => {
     try {
-      res(
-        await client.guilds.fetch(
-          interaction.options.getString("serveur_id") || interaction.guildId!
-        )
-      );
+      res(await client.guilds.fetch(args[0] ? args[0] : message.guildId!));
     } catch {
       res(null);
     }
   });
 
   if (!guild)
-    return erreur(
+    return erreurMsg(
       "Impossible d'obtenir des informations sur ce serveur.\n> Je ne peux obtenir des informations que sur les serveurs où je suis.",
-      interaction
+      message
     );
 
   const features = guild.features.map((f) => `- ${f}`);
@@ -160,8 +128,8 @@ export const command = async (
     .setImage(guild.bannerURL())
     .setTimestamp()
     .setFooter({
-      text: `Demandé par ${interaction.user.tag}`,
-      iconURL: interaction.user.displayAvatarURL(),
+      text: `Demandé par ${message.author.tag}`,
+      iconURL: message.author.displayAvatarURL(),
     })
     .setColor(config.embed.normal);
 
@@ -194,12 +162,12 @@ export const command = async (
     })
     .setColor(config.embed.normal);
   if (row.components.length > 0) {
-    await interaction.reply({
+    await message.reply({
       embeds: [embed, embed2],
       components: [row],
     });
   } else {
-    await interaction.reply({
+    await message.reply({
       embeds: [embed, embed2],
     });
   }

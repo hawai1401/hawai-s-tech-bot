@@ -35,7 +35,7 @@ export const command = async (
 ) => {
   if (!interaction.appPermissions.has("ManageMessages"))
     return erreur(
-      "Je n'ai pas la permission de supprimer des messages !",
+      "Je n'ai pas la permission de gérer les messages !",
       interaction
     );
   if (interaction.channel!.isDMBased())

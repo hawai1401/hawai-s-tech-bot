@@ -20,14 +20,24 @@ export const event = async (
     message.content.split(" ")[0]!.slice(config.prefix.length) === "eval"
   )
     return;
-  const cmd = client.prefixCommands.get(
-    message.content.split(" ")[0]!.slice(config.prefix.length)
-  );
-  if (!cmd) {
-    const similar = client.prefixCommands.filter((_, k) =>
-      k.startsWith(
+  const cmd = client.prefixCommands.find(
+    (_, k) =>
+      k.name === message.content.split(" ")[0]!.slice(config.prefix.length) ||
+      k.alias.includes(
         message.content.split(" ")[0]!.slice(config.prefix.length)
       )
+  );
+  if (!cmd) {
+    const similar = client.prefixCommands.filter(
+      (_, k) =>
+        k.name.startsWith(
+          message.content.split(" ")[0]!.slice(config.prefix.length)
+        ) ||
+        k.alias.find((a) =>
+          a.startsWith(
+            message.content.split(" ")[0]!.slice(config.prefix.length)
+          )
+        )
     );
     if (similar.size === 0)
       return await message.reply({
@@ -44,7 +54,7 @@ export const event = async (
           `### ${
             config.emojis.error
           } - Aucune commande trouvée avec ce nom !\n\nVoici des commandes similaires :\n>>> ${similar
-            .map((_, k) => `- ${k}`)
+            .map((_, k) => `- ${k.name}`)
             .join("\n")}`
         ),
       ],
