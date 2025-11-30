@@ -82,7 +82,9 @@ export const command = async (
   };
   const role =
     message.mentions.roles.first() ??
-    (args[0] ? await message.guild!.roles.fetch(args[0]) : null);
+    (args[0]
+      ? await message.guild!.roles.fetch(args[0]).catch(() => null)
+      : null);
   if (!role) return erreurMsg("Rôle invalide !", message);
 
   const embed = new EmbedBuilder()

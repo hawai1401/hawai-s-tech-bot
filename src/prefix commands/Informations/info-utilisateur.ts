@@ -64,7 +64,9 @@ export const command = async (
   const user =
     message.mentions.users.first() ??
     (args[0]
-      ? await client.users.fetch(args[0], { force: true })
+      ? await client.users
+          .fetch(args[0], { force: true })
+          .catch(() => message.author)
       : message.author);
 
   let guild_user: GuildMember | undefined;
@@ -123,7 +125,7 @@ export const command = async (
         }`,
       })
       .setThumbnail(user.displayAvatarURL({ size: 4096 }))
-      .setImage(user.bannerURL({ size: 4096 }) as string)
+      .setImage(user.bannerURL({ size: 4096 }) ?? null)
       .setColor(user.accentColor || config.embed.normal)
       .setTimestamp()
       .setFooter({
