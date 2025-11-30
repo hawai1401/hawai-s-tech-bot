@@ -11,6 +11,7 @@ import erreurMsg from "../../functions/errorMsg.js";
 
 export const data: prefixCommand_data = {
   name: "ban",
+  description: "Bannir un utilisateur.",
   alias: ["bannir"],
   permission: "BanMembers",
 };
@@ -20,9 +21,6 @@ export const command = async (
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: Array<string>
 ) => {
-  const interaction_user = await message.guild!.members.fetch(
-    message.author.id
-  );
   let user: User | GuildMember | null =
     message.mentions.users.first() ??
     (args[0] ? await client.users.fetch(args[0]) : null);
@@ -48,11 +46,11 @@ export const command = async (
 
   // Utilisateur est au-dessus de la personne à ban ?
   if (user instanceof GuildMember) {
-    const member_highthest_role = interaction_user.roles.highest.position;
+    const member_highthest_role = message.member!.roles.highest.position;
     const user_highthest_role = user.roles.highest.position;
     if (
       (member_highthest_role <= user_highthest_role &&
-        interaction_user.id !== message.guild!.ownerId) ||
+        message.member!.id !== message.guild!.ownerId) ||
       user.id === message.guild!.ownerId
     )
       return erreurMsg(

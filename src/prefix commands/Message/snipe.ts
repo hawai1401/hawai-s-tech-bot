@@ -9,6 +9,7 @@ import erreurMsg from "../../functions/errorMsg.js";
 
 export const data: prefixCommand_data = {
   name: "snipe",
+  description: "Afficher le dernier message supprimé dans le salon.",
   alias: [],
   permission: "ManageMessages",
 };

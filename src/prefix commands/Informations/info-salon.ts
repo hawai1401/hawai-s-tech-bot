@@ -14,7 +14,16 @@ import erreurMsg from "../../functions/errorMsg.js";
 
 export const data: prefixCommand_data = {
   name: "info-salon",
-  alias: ["isa", "ic", "ci"],
+  description: "Donne des informations sur un salon.",
+  alias: ["ci"],
+  options: [
+    {
+      name: "salon",
+      description: "Le salon dont vous souhaitez avoir les informations.",
+      type: "channel",
+      required: false,
+    },
+  ],
 };
 
 export const command = async (

@@ -11,6 +11,7 @@ import erreurMsg from "../../functions/errorMsg.js";
 
 export const data: prefixCommand_data = {
   name: "avertissement-ajouter",
+  description: "Avertir un membre.",
   alias: ["warn", "warn-add", "warnadd", "avertir"],
   permission: "ManageMessages",
 };

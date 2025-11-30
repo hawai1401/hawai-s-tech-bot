@@ -40,7 +40,7 @@ export const event = async (
     for (const r of rappels.slice(3 * actual_page, 3 * (actual_page + 1)))
       container
         .addSection(
-          `**Contenu** : ${r.message}\n**Date** : <t:${r.date}:F> (<t:${r.date}:R>)`,
+          `**ID** : ${r._id}\n**Contenu** : ${r.message}\n**Date** : <t:${r.date}:F> (<t:${r.date}:R>)`,
           new Button(
             "rouge",
             { emoji: "🗑️" },
@@ -57,7 +57,7 @@ export const event = async (
     for (const r of rappels.slice(3 * (actual_page - 2), 3 * (actual_page - 1)))
       container
         .addSection(
-          `**Contenu** : ${r.message}\n**Date** : <t:${r.date}:F> (<t:${r.date}:R>)`,
+          `**ID** : ${r._id}\n**Contenu** : ${r.message}\n**Date** : <t:${r.date}:F> (<t:${r.date}:R>)`,
           new Button(
             "rouge",
             { emoji: "🗑️" },

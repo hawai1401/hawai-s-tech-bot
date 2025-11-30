@@ -11,6 +11,7 @@ import erreurMsg from "../../functions/errorMsg.js";
 
 export const data: prefixCommand_data = {
   name: "avertissement-retirer",
+  description: "Supprimer un avertissement d'un membre",
   alias: ["unwarn", "warn-remove", "warnremove"],
   permission: "ManageMessages",
 };

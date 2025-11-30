@@ -33,7 +33,7 @@ export const event = async (
     },
     Modération: { emoji: "🛡️" },
     Utilitaire: { emoji: "📡" },
-    Message: {emoji: "💬"}
+    Message: { emoji: "💬" },
   };
 
   const selecteur = new StringSelectMenuBuilder()
@@ -77,11 +77,8 @@ export const event = async (
     encoding: "utf-8",
   });
 
-  const whitelist = ["pdp-decoration.js", "pdp", "banner-tag.js", "banner"];
   const commands = await client.application!.commands.fetch();
   for (const commande of cat) {
-    if (whitelist.includes(commande)) continue;
-
     const cmd = commands.find(
       (c) => c.name === commande.slice(0, commande.length - 3)
     );

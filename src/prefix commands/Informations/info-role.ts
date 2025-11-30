@@ -9,7 +9,16 @@ import erreurMsg from "../../functions/errorMsg.js";
 
 export const data: prefixCommand_data = {
   name: "info-role",
+  description: "Donne des informations sur un rôle.",
   alias: ["ir", "ri"],
+  options: [
+    {
+      name: "role",
+      description: "Le rôle dont vous souhaitez avoir les informations.",
+      type: "role",
+      required: true,
+    },
+  ],
 };
 
 export const command = async (

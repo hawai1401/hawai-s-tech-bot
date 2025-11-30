@@ -11,6 +11,7 @@ import warnMsg from "../../functions/warnMsg.js";
 
 export const data: prefixCommand_data = {
   name: "unmute",
+  description: "Rendre la voix à un utilisateur muet.",
   alias: [],
   permission: "ModerateMembers",
 };
@@ -20,9 +21,6 @@ export const command = async (
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: Array<string>
 ) => {
-  const interaction_user = await message.guild!.members.fetch(
-    message.author.id
-  );
   const user: GuildMember | null = await new Promise(async (res) => {
     try {
       res(
@@ -37,16 +35,6 @@ export const command = async (
   if (!user) return erreurMsg("Utilisateur invalide !", message);
   const raison = args.slice(1).join(" ") || "Aucune raison fournie";
 
-  // Utilisateur dans le serveur ?
-  try {
-    await message.guild!.members.fetch(user.id);
-  } catch {
-    return erreurMsg(
-      "Vous ne pouvez pas rendre la voix à un utilisateur qui ne se trouve pas sur le serveur !",
-      message
-    );
-  }
-
   // Utilisateur veut se mute lui-même
   if (message.author.id === user.id)
     return erreurMsg(
@@ -59,11 +47,11 @@ export const command = async (
     return erreurMsg("Je ne me tais jamais :stuck_out_tongue:", message);
 
   // Utilisateur est au-dessus de la personne à mute ?
-  const member_highthest_role = interaction_user.roles.highest.position;
+  const member_highthest_role = message.member!.roles.highest.position;
   const user_highthest_role = user.roles.highest.position;
   if (
     member_highthest_role <= user_highthest_role ||
-    interaction_user.id !== message.guild!.ownerId
+    message.member!.id !== message.guild!.ownerId
   )
     return erreurMsg(
       "Vous ne pouvez pas rendre la voix à un utilisateur qui supérieur ou égal à vous !",

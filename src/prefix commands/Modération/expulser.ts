@@ -10,6 +10,7 @@ import erreurMsg from "../../functions/errorMsg.js";
 
 export const data: prefixCommand_data = {
   name: "expulser",
+  description: "Expulser un membre.",
   alias: ["kick"],
   permission: "KickMembers",
 };
@@ -19,9 +20,6 @@ export const command = async (
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: Array<string>
 ) => {
-  const interaction_user = await message.guild!.members.fetch(
-    message.author.id
-  );
   const user: GuildMember | null = await new Promise(async (res) => {
     try {
       res(
@@ -55,11 +53,11 @@ export const command = async (
     );
 
   // Utilisateur est au-dessus de la personne à mute ?
-  const member_highthest_role = interaction_user.roles.highest.position;
+  const member_highthest_role = message.member!.roles.highest.position;
   const user_highthest_role = user.roles.highest.position;
   if (
     (member_highthest_role <= user_highthest_role &&
-      interaction_user.id !== message.guild!.ownerId) ||
+      message.member!.id !== message.guild!.ownerId) ||
     user.id === message.guild!.ownerId
   )
     return erreurMsg(

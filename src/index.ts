@@ -18,10 +18,33 @@ config({ quiet: true });
 import { connect } from "./db/mongo.js";
 import { deployementEvent } from "./handlers/events.js";
 
+type option = "user" | "channel" | "role" | "string" | "number" | "guild";
+
+interface BaseOption<T extends option> {
+  name: string;
+  description: string;
+  type: T;
+  required: boolean;
+}
+interface NumberOption extends BaseOption<"number"> {
+  min?: number;
+  max?: number;
+}
+
+type CommandOption =
+  | BaseOption<"user">
+  | BaseOption<"channel">
+  | BaseOption<"role">
+  | BaseOption<"string">
+  | NumberOption
+  | BaseOption<"guild">;
+
 export interface prefixCommand_data {
   name: string;
+  description: string;
   alias: Array<string>;
   permission?: PermissionResolvable;
+  options?: Array<CommandOption>;
 }
 
 export class botClient extends Client {

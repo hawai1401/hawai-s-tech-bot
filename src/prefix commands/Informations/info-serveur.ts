@@ -12,7 +12,17 @@ import erreurMsg from "../../functions/errorMsg.js";
 
 export const data: prefixCommand_data = {
   name: "info-serveur",
-  alias: ["ise", "si"],
+  description: "Donne des informations sur un serveur.",
+  alias: ["si"],
+  options: [
+    {
+      name: "serveur_id",
+      description:
+        "L'identifiant du serveur dont vous souhaitez avoir les informations.",
+      type: "guild",
+      required: false,
+    },
+  ],
 };
 
 export const command = async (

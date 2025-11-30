@@ -17,6 +17,7 @@ import warnMsg from "../../functions/warnMsg.js";
 
 export const data: prefixCommand_data = {
   name: "avertissement-lister",
+  description: "Lister les avertissements d'un membre.",
   alias: ["warns", "warn-list", "warnlist"],
   permission: "ManageMessages",
 };

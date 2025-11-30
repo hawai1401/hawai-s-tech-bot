@@ -5,8 +5,19 @@ import successMsg from "../../functions/successMsg.js";
 
 export const data: prefixCommand_data = {
   name: "clear",
+  description: "Effacer des messages en masse datant de moins de 14 jours.",
   alias: ["cls"],
   permission: "ManageMessages",
+  options: [
+    {
+      name: "nombre",
+      description: "Le nombre de message à supprimer.",
+      type: "number",
+      required: true,
+      min: 1,
+      max: 99,
+    },
+  ],
 };
 
 export const command = async (

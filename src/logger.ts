@@ -135,8 +135,6 @@ export function deployementPrefix(name: string, success: boolean) {
   const nom = text_color + "CMD" + reset_color;
   const statut = status_color + "Success" + reset_color;
 
-  console.log(`${reset_color}[ ${nom} ][ ${statut} ][ ${cmd} ]`);
-
   if (success === true) {
     const status_color = `\x1b[0m\x1b[3${colorCodes.vert}m`;
     const statut = status_color + "Success" + reset_color;

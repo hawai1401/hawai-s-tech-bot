@@ -10,7 +10,17 @@ import erreurMsg from "../../functions/errorMsg.js";
 
 export const data: prefixCommand_data = {
   name: "info-invitation",
+  description: "Donne des informations sur une invitation.",
   alias: ["ii"],
+  options: [
+    {
+      name: "invitation",
+      description:
+        "L'invitation dont vous souhaitez connaître les informations. (https://discord.gg/xxx)",
+      type: "string",
+      required: true,
+    },
+  ],
 };
 
 export const command = async (
@@ -42,10 +52,14 @@ export const command = async (
     }
   });
   if (!invitation) return erreurMsg("Invitation invalide !", message);
+  const inviteur = await client.users
+    .fetch(invitation.inviterId!)
+    .catch(() => null);
   await message.reply({
     embeds: [
       new EmbedBuilder()
         .setColor(config.embed.normal)
+        .setThumbnail(inviteur?.displayAvatarURL() ?? "")
         .addFields({
           name: "🔗 - Invitation",
           value: `>>> **Salon** : \`${
@@ -76,7 +90,9 @@ export const command = async (
         })
         .addFields({
           name: "👤 - Inviteur",
-          value: `>>> **ID** : ${invitation.inviterId}`,
+          value: `>>> **ID** : ${invitation.inviterId}\n**Pseudo** : ${
+            inviteur?.username ?? "Inconnu"
+          }`,
         }),
     ],
   });

@@ -9,6 +9,7 @@ import erreurMsg from "../../functions/errorMsg.js";
 
 export const data: prefixCommand_data = {
   name: "unban",
+  description: "Débannir un utilisateur.",
   alias: ["deban"],
   permission: "BanMembers",
 };
@@ -18,9 +19,6 @@ export const command = async (
   message: OmitPartialGroupDMChannel<Message<boolean>>,
   args: Array<string>
 ) => {
-  const interaction_user = await message.guild!.members.fetch(
-    message.author.id
-  );
   const user =
     message.mentions.users.first() ??
     (args[0] ? await client.users.fetch(args[0]) : null);

@@ -1,9 +1,4 @@
-import {
-  ActivityType,
-  Collection,
-  EmbedBuilder,
-  MessageFlags,
-} from "discord.js";
+import { ActivityType, EmbedBuilder, MessageFlags } from "discord.js";
 import type { botClient } from "../../index.js";
 import { deployementSlash } from "../../handlers/slashCommands.js";
 import config from "../../../config.json" with { type: "json" };
@@ -46,12 +41,14 @@ export const event = async (client: botClient) => {
   await deployementSlash(client);
 
   // Déployer les prefix commandes
-  await deployementPrefix(client)
+  await deployementPrefix(client);
 
   // Mise en place des rappels
   const db = getDb().Rappels;
   setInterval(async () => {
-    const rappels = await db.find({ $expr: { $lt: ["$date", Date.now()] } });
+    const rappels = await db.find({
+      $expr: { $lt: ["$date", Date.now() / 1000] },
+    });
     if (!rappels[0]) return;
     for (const r of rappels) {
       const user = await client.users.fetch(r.user);
@@ -113,7 +110,7 @@ export const event = async (client: botClient) => {
     (salon as any).send({ embeds: [embed] });
   });
   client.on("error", async (e) => {
-    console.error(e)
+    console.error(e);
     const embed = new EmbedBuilder()
       .setTitle("[ ANTI-CRASH ] - Erreur du bot")
       .setColor(config.embed.error)

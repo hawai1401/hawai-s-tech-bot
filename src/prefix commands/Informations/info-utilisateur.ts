@@ -14,7 +14,17 @@ import config from "../../../config.json" with { type: "json" };
 
 export const data: prefixCommand_data = {
   name: "info-utilisateur",
+  description: "Donne des informations sur un utilisateur.",
   alias: ["iu", "ui"],
+  options: [
+    {
+      name: "utilisateur",
+      description:
+        "L'utilisateur dont vous souhaitez connaitre les informations.",
+      type: "user",
+      required: false,
+    },
+  ],
 };
 
 export const command = async (
