@@ -24,7 +24,7 @@ export const cmd_builder = new SlashCommandBuilder()
   .addRoleOption((o) =>
     o
       .setName("role")
-      .setDescription("Le rôle dont vous souhaitez avoir les informations")
+      .setDescription("Le rôle dont vous souhaitez avoir les informations.")
       .setRequired(true)
   );
 

@@ -60,7 +60,7 @@ export const cmd_builder = new SlashCommandBuilder()
   .addSubcommand((sub) =>
     sub
       .setName("retirer")
-      .setDescription("Supprimer l'avertissement d'un membre")
+      .setDescription("Supprimer un avertissement d'un membre")
       .addUserOption((o) =>
         o
           .setName("membre")

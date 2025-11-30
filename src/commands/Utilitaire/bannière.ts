@@ -6,7 +6,6 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
 } from "discord.js";
-
 import type { botClient } from "../../index.js";
 import erreur from "../../functions/error.js";
 import Button from "../../class/button.js";
@@ -35,12 +34,13 @@ export const cmd_builder = new SlashCommandBuilder()
 
 export const command = async (
   client: botClient,
-  interaction: ChatInputCommandInteraction,
+  interaction: ChatInputCommandInteraction
 ) => {
   const user = await client.users.fetch(
-    interaction.options.getUser("utilisateur")?.id ?? interaction.user.id
+    interaction.options.getUser("utilisateur")?.id ?? interaction.user.id,
+    { force: true }
   );
-  const banner = user.bannerURL();
+  const banner = user.bannerURL({ size: 4096 });
   if (!banner)
     return erreur("Cet utilisateur ne possède pas de bannière !", interaction);
 

@@ -39,6 +39,7 @@ export const command = async (
   client: botClient,
   interaction: ChatInputCommandInteraction
 ) => {
+  await interaction.deferReply();
   const channelTypes = {
     0: "Textuel",
     1: "Message Privé",
@@ -66,10 +67,14 @@ export const command = async (
     }
   });
   if (!invitation) return erreur("Invitation invalide !", interaction);
-  await interaction.reply({
+  const inviteur = await client.users
+    .fetch(invitation.inviterId!)
+    .catch(() => null);
+  await interaction.editReply({
     embeds: [
       new EmbedBuilder()
         .setColor(config.embed.normal)
+        .setThumbnail(inviteur?.displayAvatarURL() ?? "")
         .addFields({
           name: "🔗 - Invitation",
           value: `>>> **Salon** : \`${
@@ -100,7 +105,9 @@ export const command = async (
         })
         .addFields({
           name: "👤 - Inviteur",
-          value: `>>> **ID** : ${invitation.inviterId}`,
+          value: `>>> **ID** : ${invitation.inviterId}\n**Pseudo** : ${
+            inviteur?.username ?? "Inconnu"
+          }`,
         }),
     ],
   });
