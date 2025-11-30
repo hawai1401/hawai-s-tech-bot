@@ -161,6 +161,6 @@ export const event = async (client: botClient) => {
   process.on("disconnect", () => {
     console.log("c");
   });
-  const stop_event = ["SIGINT", "SIGABRT", "SIGKILL", "SIGSTOP", "SIGTERM"];
+  const stop_event = ["SIGINT", "SIGABRT", "SIGTERM"];
   for (const e of stop_event) process.on(e, () => handleStop(salon));
 };
