@@ -41,14 +41,14 @@ export const cmd_builder = new SlashCommandBuilder()
       .setDescription("Créer un nouveau rappel.")
       .addStringOption((o) =>
         o
-          .setName("message")
-          .setDescription("Le message du rappel qui vous sera envoyé.")
+          .setName("temps")
+          .setDescription("Dans combien de temps le rappel doit être envoyé ?")
           .setRequired(true)
       )
       .addStringOption((o) =>
         o
-          .setName("temps")
-          .setDescription("Dans combien de temps le rappel doit être envoyé ?")
+          .setName("message")
+          .setDescription("Le message du rappel qui vous sera envoyé.")
           .setRequired(true)
       )
   )

@@ -36,11 +36,11 @@ export const command = async (
 ) => {
   const db = getDb().Rappels;
 
-  const content = args[0];
-  const temps = args[1] as StringValue | undefined;
+  const temps = args[0] as StringValue | undefined;
+  if (!temps) return erreurMsg("Durée invalide !", message);
+  const content = args.slice(1).join(" ");
   if (!content)
     return erreurMsg("Vous ne pouvez pas ajouter un rappel vide !", message);
-  if (!temps) return erreurMsg("Durée invalide", message);
 
   try {
     const temps_ms = ms(temps);
@@ -52,7 +52,6 @@ export const command = async (
     );
   }
 
-  console.log(ms(temps), Math.floor((Date.now() + ms(temps)) / 1000));
   const temps_s = Math.floor((Date.now() + ms(temps)) / 1000);
 
   const nbr_rappels = await db.find({

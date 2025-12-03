@@ -77,7 +77,8 @@ export const command = async (
       })
       .setTimestamp();
 
-  const raison: string = args[1]!;
+  const raison = args.slice(1).join(" ");
+  if (!raison) return erreurMsg("Motif invalide !", message);
 
   const actual_warns = await db.find({
     user: user.id,
