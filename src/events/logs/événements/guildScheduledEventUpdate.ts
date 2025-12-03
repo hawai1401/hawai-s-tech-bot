@@ -1,5 +1,6 @@
 import {
   EmbedBuilder,
+  GuildScheduledEventEntityType,
   TextChannel,
   type GuildScheduledEvent,
   type PartialGuildScheduledEvent,
@@ -18,6 +19,13 @@ export const event = async (
   newGuildScheduledEvent: GuildScheduledEvent
 ) => {
   if (!oldGuildScheduledEvent) return;
+
+  const GuildScheduledEventStatus = {
+    1: "Planifié",
+    2: "En cours",
+    3: "Terminé",
+    4: "Annulé",
+  };
 
   const embed = new EmbedBuilder()
     .setColor(config.embed.warn)
@@ -147,7 +155,63 @@ export const event = async (
     value: ">>> " + updated.join("\n"),
   });
 
-  // - Status
+  if (oldGuildScheduledEvent.status !== newGuildScheduledEvent.status) {
+    embed
+      .setFields({
+        name: "ℹ️ - Informations",
+        value: `>>> **ID** : ${newGuildScheduledEvent.id}\n**Nom** : ${
+          newGuildScheduledEvent.name
+        }\n**Description** : _${
+          newGuildScheduledEvent.description?.slice(0, 500) ?? "Aucune"
+        }_${
+          newGuildScheduledEvent.description &&
+          newGuildScheduledEvent.description.length > 500
+            ? "..."
+            : ""
+        }\n\n**Lieu** : ${
+          newGuildScheduledEvent.entityType ===
+          GuildScheduledEventEntityType.External
+            ? newGuildScheduledEvent.entityMetadata!.location
+            : `${newGuildScheduledEvent.channel} \`${
+                newGuildScheduledEvent.channel!.name
+              }\``
+        }\n**Date de création** : <t:${Math.floor(
+          newGuildScheduledEvent.createdTimestamp / 1000
+        )}:R> (<t:${Math.floor(
+          newGuildScheduledEvent.createdTimestamp / 1000
+        )}:F>)\n**Date de commencement** : <t:${Math.floor(
+          newGuildScheduledEvent.scheduledStartTimestamp! / 1000
+        )}:R> (<t:${Math.floor(
+          newGuildScheduledEvent.scheduledStartTimestamp! / 1000
+        )}:F>)\n**Date de fin** : ${
+          newGuildScheduledEvent.scheduledEndTimestamp
+            ? `<t:${Math.floor(
+                newGuildScheduledEvent.scheduledEndTimestamp / 1000
+              )}:R> (<t:${Math.floor(
+                newGuildScheduledEvent.scheduledEndTimestamp / 1000
+              )}:F>)`
+            : "_Non saisie_"
+        }\n\n**Lien** : ${newGuildScheduledEvent.url}\n**Récurrent** : ${
+          newGuildScheduledEvent.recurrenceRule
+            ? config.emojis.success
+            : config.emojis.error
+        }`,
+      })
+      .setColor(
+        newGuildScheduledEvent.status === 3
+          ? config.embed.success
+          : newGuildScheduledEvent.status === 4
+          ? config.embed.error
+          : config.embed.warn
+      )
+      .setImage(newGuildScheduledEvent.coverImageURL({ size: 4096 }))
+      .setFooter({
+        text: `Événement ${GuildScheduledEventStatus[
+          newGuildScheduledEvent.status
+        ].toLowerCase()}`,
+        iconURL: newGuildScheduledEvent.guild?.iconURL() ?? "",
+      });
+  }
 
   const channel = (await client.channels.fetch(
     "1445513101029146745"

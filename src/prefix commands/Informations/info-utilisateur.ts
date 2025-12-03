@@ -231,7 +231,9 @@ export const command = async (
     if (guild_user) {
       embed.addFields({
         name: ":satellite: - Serveur",
-        value: `>>> Administrateur : ${admin}\nMembre du serveur : ${config.emojis.success}\nRejoin le **<t:${join_date}:F>** (*<t:${join_date}:R>*)`,
+        value: `>>> Administrateur : ${getEmoji(admin)}\nMembre du serveur : ${
+          config.emojis.success
+        }\nRejoin le **<t:${join_date}:F>** (*<t:${join_date}:R>*)`,
       });
     } else {
       embed.addFields({
