@@ -111,7 +111,7 @@ export const event = async (
     ModerateMembers: "Rendre muet des membres",
     ViewCreatorMonetizationAnalytics: "",
     UseSoundboard: "Utiliser les soundboard",
-    CreateGuildExpressions: "",
+    CreateGuildExpressions: "Créer des emojis, stickers et soundboards",
     CreateEvents: "Créer des événements",
     UseExternalSounds: "Utiliser des soundboards externes",
     SendVoiceMessages: "Envoyer des messages vocaux",
