@@ -163,4 +163,9 @@ export const event = async (client: botClient) => {
   });
   const stop_event = ["SIGINT", "SIGABRT", "SIGTERM"];
   for (const e of stop_event) process.on(e, () => handleStop(salon));
+
+  await (salon as any).send({
+    components: [new Container("success").addText("### Bot démarré avec succès !")],
+    flags: MessageFlags.IsComponentsV2,
+  });
 };
