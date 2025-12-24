@@ -11,8 +11,7 @@ import config from "../../../../config.json" with { type: "json" };
 export const type = "inviteDelete";
 
 export const event = async (client: botClient, invite: Invite) => {
-    if (!invite.guild || !(invite.guild instanceof Guild))
-    return;
+  if (!invite.guild || !(invite.guild instanceof Guild)) return;
   const log = (
     await invite.guild.fetchAuditLogs({
       type: AuditLogEvent.InviteDelete,
@@ -26,20 +25,9 @@ export const event = async (client: botClient, invite: Invite) => {
     .setColor(config.embed.error)
     .addFields({
       name: "🔗 - Invitation",
-      value: `>>> **Salon** : ${invite.channel} \`${invite.channel!.name}\`
-         **Nombre maximum d'utilisation** : ${
-           invite.maxUses && invite.maxUses === 0
-             ? "♾️"
-             : invite.maxUses
-             ? invite.maxUses
-             : "Inconnu"
-         }\n**Lien** : ${invite.url}\n**Expire** ${
-        invite.expiresTimestamp
-          ? `<t:${Math.floor(
-              invite.expiresTimestamp / 1000
-            )}:R> (<t:${Math.floor(invite.expiresTimestamp / 1000)}:F>)`
-          : "Jamais"
-      }\n**Temporaire** : ${
+      value: `>>> **Salon** : ${invite.channel} \`${
+        invite.channel!.name
+      }\`\n**Lien** : ${invite.url}\n**Temporaire** : ${
         invite.temporary ? config.emojis.success : config.emojis.error
       }`,
     })
