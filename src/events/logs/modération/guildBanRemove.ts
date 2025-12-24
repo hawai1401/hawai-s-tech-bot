@@ -49,14 +49,9 @@ export const event = async (client: botClient, ban: GuildBan) => {
       value: `> ${config.emojis.error} - Impossible de trouver le modérateur de la révocation de ce bannissement.`,
     });
   }
-  if ((log && log.reason))
+  if (ban.reason)
     embed.addFields({
-      name: "✏️ - Raison du débannissement",
-      value: `>>> ${log && log.reason ? log.reason : ban.reason}`,
-    });
-
-    if (ban.reason) embed.addFields({
-      name: "📤 - Raison du bannissement",
+      name: "✏️ - Raison",
       value: `>>> ${ban.reason}`,
     });
 

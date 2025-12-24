@@ -49,10 +49,10 @@ export const event = async (client: botClient, ban: GuildBan) => {
       value: `> ${config.emojis.error} - Impossible de trouver le modérateur de ce bannissement.`,
     });
   }
-  if ((log && log.reason) || ban.reason)
+  if (ban.reason)
     embed.addFields({
       name: "✏️ - Raison",
-      value: `>>> ${log && log.reason ? log.reason : ban.reason}`,
+      value: `>>> ${ban.reason}`,
     });
 
   const channel = (await client.channels.fetch(
