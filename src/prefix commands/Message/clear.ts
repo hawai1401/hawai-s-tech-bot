@@ -45,9 +45,13 @@ export const command = async (
       message
     );
 
-  return successMsg(
+  const success_msg = await successMsg(
     `${msg.size} messages ont été supprimé avec succès !`,
     message,
     { notReply: true }
   );
+
+  setTimeout(() => {
+    success_msg.delete();
+  }, 10000);
 };
