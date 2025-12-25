@@ -75,7 +75,9 @@ export const event = async (
 
   if (oldSoundboardSound.volume !== newSoundboardSound.volume)
     updated.push(
-      `**Volume** : ${oldSoundboardSound.volume}% ${config.emojis.arrow_right} ${newSoundboardSound.volume}%`
+      `**Volume** : ${oldSoundboardSound.volume * 100}% ${
+        config.emojis.arrow_right
+      } ${newSoundboardSound.volume * 100}%`
     );
 
   if (

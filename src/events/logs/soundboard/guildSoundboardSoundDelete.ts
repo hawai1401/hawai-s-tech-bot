@@ -35,7 +35,9 @@ export const event = async (
       name: "🔧  - Informations sur le son",
       value: `>>> **ID** : ${soundboardSound.soundId}\n**Nom** : ${
         soundboardSound.name
-      }\n**Volume** : ${soundboardSound.volume}%\n**Émoji similaire** : ${
+      }\n**Volume** : ${
+        soundboardSound.volume ? soundboardSound.volume * 100 + "%" : "Inconnu"
+      }\n**Émoji similaire** : ${
         soundboardSound.emoji ?? "Aucun"
       }\n**Créé** <t:${Math.floor(
         soundboardSound.createdTimestamp / 1000
